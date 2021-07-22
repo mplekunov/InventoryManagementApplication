@@ -1,0 +1,16 @@
+ucf/assignments/InventoryManagementApp.java
+ ucf.assignments.InventoryManagementApp
+ucf/assignments/SceneManager.java
+ ucf.assignments.SceneManager
+ucf/assignments/Item.java
+ ucf.assignments.Item
+ucf/assignments/TreeTableFactories/DateFactory.java
+ ucf.assignments.TreeTableFactories.DateFactory
+ucf/assignments/TreeTableFactories/SerialNumberFactory.java
+ ucf.assignments.TreeTableFactories.SerialNumberFactory
+ucf/assignments/TreeTableFactories/NameFactory.java
+ ucf.assignments.TreeTableFactories.NameFactory
+ucf/assignments/MainController.java
+ ucf.assignments.MainController
+ucf/assignments/TreeTableFactories/PriceFactory.java
+ ucf.assignments.TreeTableFactories.PriceFactory
