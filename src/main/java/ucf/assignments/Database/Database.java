@@ -1,12 +1,8 @@
 package ucf.assignments.Database;
 
-import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+import ucf.assignments.DateConverter;
 import ucf.assignments.Models.Item;
-import ucf.assignments.Models.ItemModel;
-
 import java.sql.*;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class Database {
@@ -31,8 +27,7 @@ public class Database {
                 item.setName(resultSet.getString("name"));
                 item.setSerialNumber(resultSet.getString("serialNumber"));
                 item.setPrice(resultSet.getDouble("price"));
-                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                item.setDate(LocalDate.parse(resultSet.getString("date"), dtf));
+                item.setDate(DateConverter.toDate(resultSet.getString("date")));
                 item.setId(resultSet.getInt("ROWID"));
 
                 items.add(item);
@@ -59,7 +54,13 @@ public class Database {
             Statement statement = connection.createStatement();
 
             String query = "UPDATE Items SET serialNumber = '%s', name = '%s', price = %lf, date = '%s' WHERE ROWID = %d";
-            ResultSet resultSet = statement.executeQuery(String.format(query, item.getSerialNumber(), item.getName(), item.getPrice(), item.getDate(), item.getId()));
+            statement.executeQuery(
+                    String.format(query,
+                            item.getSerialNumber().getValue(),
+                            item.getName().getValue(),
+                            item.getPrice().getValue(),
+                            DateConverter.toString(item.getDate().getValue()),
+                            item.getId()));
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -80,7 +81,12 @@ public class Database {
             Statement statement = connection.createStatement();
 
             String query = "INSERT INTO Items VALUES('%s', '%s', '%lf', '%s')";
-            ResultSet resultSet = statement.executeQuery(String.format(query, item.getSerialNumber(), item.getName(), item.getPrice(), item.getDate().toString()));
+            statement.executeQuery(
+                    String.format(query,
+                            item.getSerialNumber().getValue(),
+                            item.getName().getValue(),
+                            item.getPrice().getValue(),
+                            DateConverter.toString(item.getDate().getValue())));
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
