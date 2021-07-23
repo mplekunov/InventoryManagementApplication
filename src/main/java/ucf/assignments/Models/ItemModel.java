@@ -27,35 +27,41 @@ public class ItemModel {
                         item.getDate()
                 });
 
-        database.getItems().forEach(item -> {
-            itemCollection.put(item, DataState.Cached);
-            itemObservable.add(item);
-        });
+        download();
 
-        itemObservable.addListener((ListChangeListener<Item>) c -> {
-            while (c.next()) {
-                if (c.wasAdded()) {
-                    for (int i = c.getFrom(); i < c.getTo(); i++) {
-                        SimpleStringProperty serialNumber = itemObservable.get(i).getSerialNumber();
-                        boolean isFound = itemCollection.keySet().stream().anyMatch(obj -> obj.getSerialNumber().equals(serialNumber));
-
-                        if (!isFound)
-                            itemCollection.put(itemObservable.get(i), DataState.Added);
-                        else throw new NullPointerException();
-                    }
-                }
-                else if (c.wasUpdated())
-                    for (int i = c.getFrom(); i < c.getTo(); i++)
-                        itemCollection.put(itemObservable.get(i), DataState.Updated);
-                else
-                    for (Item removed: c.getRemoved())
-                        itemCollection.put(removed, DataState.Removed);
-            }
-        });
+        itemObservable.addListener(this::addListChangeListener);
     }
 
     public ObservableList<Item> getItemObservable() {
         return itemObservable;
+    }
+
+    private void addListChangeListener(ListChangeListener.Change<? extends Item> listener) {
+        while (listener.next()) {
+            if (listener.wasAdded()) {
+                for (int i = listener.getFrom(); i < listener.getTo(); i++) {
+                    SimpleStringProperty serialNumber = itemObservable.get(i).getSerialNumber();
+                    boolean isFound = itemCollection.keySet().stream().anyMatch(obj -> obj.getSerialNumber().equals(serialNumber));
+
+                    if (!isFound)
+                        itemCollection.put(itemObservable.get(i), DataState.Added);
+                    else throw new NullPointerException();
+                }
+            }
+            else if (listener.wasUpdated())
+                for (int i = listener.getFrom(); i < listener.getTo(); i++)
+                    itemCollection.put(itemObservable.get(i), DataState.Updated);
+            else
+                for (Item removed: listener.getRemoved())
+                    itemCollection.put(removed, DataState.Removed);
+        }
+    }
+
+    private void download() {
+        database.getItems().forEach(item -> {
+            itemCollection.put(item, DataState.Cached);
+            itemObservable.add(item);
+        });
     }
 
     public void upload() {
