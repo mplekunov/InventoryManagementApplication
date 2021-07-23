@@ -2,6 +2,7 @@ package ucf.assignments.Controllers;
 
 import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -44,11 +45,14 @@ public class MainController {
     private JFXButton exportItemsBtn;
 
     @FXML
+    private JFXButton exitBtn;
+
+    @FXML
     private BorderPane mainPane;
 
-    private SceneManager sceneManager;
-    private ItemModel itemModel;
-    private EditItemController editItemController;
+    private final SceneManager sceneManager;
+    private final ItemModel itemModel;
+    private final EditItemController editItemController;
 
     public MainController(ItemModel itemModel, EditItemController editItemController, SceneManager sceneManager) {
         this.itemModel = itemModel;
@@ -57,6 +61,7 @@ public class MainController {
     }
 
     public void initialize() {
+        exitBtn.setOnAction(this::exitProgram);
         importItemsBtn.setOnAction(this::importFile);
         exportItemsBtn.setOnAction(this::exportFile);
 
@@ -162,6 +167,13 @@ public class MainController {
         itemTable.getColumns().setAll(itemDate, itemName, itemSerialNumber, itemPrice);
         itemTable.setRoot(test);
         itemTable.setShowRoot(false);
+    }
+
+    private void exitProgram(ActionEvent actionEvent) {
+        itemModel.upload();
+
+        Platform.exit();
+        System.exit(0);
     }
 
     private void exportFile(ActionEvent actionEvent) {

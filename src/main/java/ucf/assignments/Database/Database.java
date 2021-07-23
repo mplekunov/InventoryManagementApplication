@@ -53,8 +53,8 @@ public class Database {
             connection = DriverManager.getConnection(connectionString);
             Statement statement = connection.createStatement();
 
-            String query = "UPDATE Items SET serialNumber = '%s', name = '%s', price = %lf, date = '%s' WHERE ROWID = %d";
-            statement.executeQuery(
+            String query = "UPDATE Items SET serialNumber = '%s', name = '%s', price = %f, date = '%s' WHERE ROWID = %d";
+            statement.execute(
                     String.format(query,
                             item.getSerialNumber().getValue(),
                             item.getName().getValue(),
@@ -81,7 +81,7 @@ public class Database {
             Statement statement = connection.createStatement();
 
             String query = "INSERT INTO Items VALUES('%s', '%s', '%lf', '%s')";
-            statement.executeQuery(
+            statement.execute(
                     String.format(query,
                             item.getSerialNumber().getValue(),
                             item.getName().getValue(),
