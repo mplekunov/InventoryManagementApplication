@@ -1,12 +1,12 @@
 package ucf.assignments.TreeTableFactories;
 
 import com.jfoenix.controls.JFXTextField;
-import javafx.scene.control.TreeTableCell;
-import ucf.assignments.Item;
+import com.jfoenix.controls.cells.editors.base.JFXTreeTableCell;
+import ucf.assignments.Models.Item;
 
 import java.text.NumberFormat;
 
-public class PriceFactory extends TreeTableCell<Item, String> {
+public class PriceFactory extends JFXTreeTableCell<Item, String> {
     private JFXTextField textField;
 
     public PriceFactory() {}
@@ -50,12 +50,14 @@ public class PriceFactory extends TreeTableCell<Item, String> {
         }
     }
 
+
+
     private String getSerialNumber() {
-        return getItem() == null ? "" : getItem().replaceAll("\\$", "");
+        return getItem() == null ? "" : getItem();
     }
 
     private void createTextField() {
-        textField = new JFXTextField(getText());
+        textField = new JFXTextField(getText().replaceAll("\\$", ""));
         textField.setMinWidth(this.getWidth());
         textField.setOnAction(e -> commitEdit(textField.getText()));
     }

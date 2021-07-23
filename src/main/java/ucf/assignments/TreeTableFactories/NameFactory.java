@@ -1,10 +1,10 @@
 package ucf.assignments.TreeTableFactories;
 
 import com.jfoenix.controls.JFXTextField;
-import javafx.scene.control.TreeTableCell;
-import ucf.assignments.Item;
+import com.jfoenix.controls.cells.editors.base.JFXTreeTableCell;
+import ucf.assignments.Models.Item;
 
-public class NameFactory extends TreeTableCell<Item, String> {
+public class NameFactory extends JFXTreeTableCell<Item, String> {
     private JFXTextField textField;
 
     public NameFactory() {}

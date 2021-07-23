@@ -1,17 +1,14 @@
 package ucf.assignments.TreeTableFactories;
 
 import com.jfoenix.controls.JFXDatePicker;
-import javafx.scene.control.ContentDisplay;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TreeTableCell;
-import ucf.assignments.Item;
+import com.jfoenix.controls.cells.editors.base.JFXTreeTableCell;
+import ucf.assignments.Models.Item;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 
-public class DateFactory extends TreeTableCell<Item, LocalDate> {
+public class DateFactory extends JFXTreeTableCell<Item, LocalDate> {
 
     private JFXDatePicker datePicker;
 
@@ -31,7 +28,7 @@ public class DateFactory extends TreeTableCell<Item, LocalDate> {
     public void cancelEdit() {
         super.cancelEdit();
 
-        setText(getDate().toString());
+        setText(getDate().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)));
         setGraphic(null);
     }
 
@@ -50,7 +47,7 @@ public class DateFactory extends TreeTableCell<Item, LocalDate> {
                 setText(null);
                 setGraphic(datePicker);
             } else {
-                setText(getDate().format(DateTimeFormatter.ofLocalizedDate((FormatStyle.MEDIUM))));
+                setText(getDate().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)));
                 setGraphic(null);
             }
         }

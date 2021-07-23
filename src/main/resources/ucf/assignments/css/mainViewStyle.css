@@ -1,0 +1,42 @@
+#dashboardPane, #inventoryPane, #exitPane {
+    -fx-border-color: black;
+    -fx-border-width: 0.5;
+    -fx-border-style: hidden;
+}
+
+.separator:horizontal > .line{
+    -fx-border-style: solid;
+    -fx-border-color: grey;
+    -fx-border-width: 0.3;
+    -fx-border-insets: 1;
+}
+
+#inventoryVBox {
+    -fx-border-color: blue;
+    -fx-border-width: 4 0 0 0;
+    -fx-border-style: solid hidden hidden hidden;
+}
+
+#inventoryMenuPane {
+    -fx-border-color: darkgrey;
+    -fx-border-width: 0 0 1 0;
+    -fx-border-style: hidden hidden solid hidden;
+}
+
+.context-menu {
+    -fx-background-color: green;
+    -fx-background-radius: 0 8 8 8;
+    -fx-border-radius: 0 8 8 8;
+    -fx-effect: none;
+    -fx-min-width: 100;
+}
+
+.menu-item {
+    -fx-background-color: transparent;
+}
+
+.menu-item:hover {
+    -fx-background-color: red;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+}

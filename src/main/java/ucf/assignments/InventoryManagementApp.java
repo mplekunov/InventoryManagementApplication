@@ -16,18 +16,11 @@ public class InventoryManagementApp extends Application {
 
     @Override
     public void start(Stage mainWindow) throws Exception {
-        try {
-            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("MainView.fxml")));
+        SceneManager sceneManager = new SceneManager();
+        sceneManager.load();
 
-            Scene mainScene = new Scene(root);
-
-            mainWindow.setTitle("To Do List");
-            mainWindow.setScene(mainScene);
-            mainWindow.show();
-            mainWindow.setResizable(false);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        mainWindow.setTitle("IMA");
+        mainWindow.setScene(sceneManager.getScene("MainView"));
+        mainWindow.show();
     }
 }
