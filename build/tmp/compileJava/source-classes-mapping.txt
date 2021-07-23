@@ -14,15 +14,15 @@ ucf/assignments/Database/DataState.java
  ucf.assignments.Database.DataState
 ucf/assignments/Models/Item.java
  ucf.assignments.Models.Item
-ucf/assignments/Controllers/AddItemController.java
- ucf.assignments.Controllers.AddItemController
-ucf/assignments/DateConverter.java
- ucf.assignments.DateConverter
-ucf/assignments/Controllers/MainController.java
- ucf.assignments.Controllers.MainController
-ucf/assignments/SceneManager.java
- ucf.assignments.SceneManager
 ucf/assignments/Database/Database.java
  ucf.assignments.Database.Database
+ucf/assignments/DateConverter.java
+ ucf.assignments.DateConverter
+ucf/assignments/SceneManager.java
+ ucf.assignments.SceneManager
+ucf/assignments/Controllers/AddItemController.java
+ ucf.assignments.Controllers.AddItemController
 ucf/assignments/Models/ItemModel.java
  ucf.assignments.Models.ItemModel
+ucf/assignments/Controllers/MainController.java
+ ucf.assignments.Controllers.MainController

@@ -27,7 +27,7 @@ public class ItemModel {
                         item.getDate()
                 });
 
-        download();
+        initCollections();
 
         itemObservable.addListener(this::addListChangeListener);
     }
@@ -57,7 +57,7 @@ public class ItemModel {
         }
     }
 
-    private void download() {
+    private void initCollections() {
         database.getItems().forEach(item -> {
             itemCollection.put(item, DataState.Cached);
             itemObservable.add(item);
