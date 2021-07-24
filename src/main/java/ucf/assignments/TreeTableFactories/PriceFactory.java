@@ -60,5 +60,9 @@ public class PriceFactory extends JFXTreeTableCell<Item, String> {
         textField = new JFXTextField(getText().replaceAll("\\$", ""));
         textField.setMinWidth(this.getWidth());
         textField.setOnAction(e -> commitEdit(textField.getText()));
+        textField.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if(!newValue)
+                commitEdit(textField.getText());
+        });
     }
 }

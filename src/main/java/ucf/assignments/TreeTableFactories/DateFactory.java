@@ -61,6 +61,10 @@ public class DateFactory extends JFXTreeTableCell<Item, LocalDate> {
         datePicker = new JFXDatePicker(getDate());
         datePicker.setMinWidth(this.getWidth() - this.getGraphicTextGap() * 2);
         datePicker.setOnAction(e -> commitEdit(LocalDate.from(datePicker.getValue())));
+        datePicker.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue)
+                commitEdit(LocalDate.from(datePicker.getValue()));
+        });
     }
 }
 

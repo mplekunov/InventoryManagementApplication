@@ -47,13 +47,13 @@ public class ItemModel {
                         itemCollection.put(itemObservable.get(i), DataState.Added);
                     else throw new NullPointerException();
                 }
-            }
-            else if (listener.wasUpdated())
+            } else if (listener.wasUpdated()) {
                 for (int i = listener.getFrom(); i < listener.getTo(); i++)
                     itemCollection.put(itemObservable.get(i), DataState.Updated);
-            else
-                for (Item removed: listener.getRemoved())
+            } else {
+                for (Item removed : listener.getRemoved())
                     itemCollection.put(removed, DataState.Removed);
+            }
         }
     }
 

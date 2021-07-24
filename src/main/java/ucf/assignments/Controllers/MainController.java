@@ -4,8 +4,8 @@ import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Side;
@@ -19,13 +19,12 @@ import javafx.util.Callback;
 import ucf.assignments.Models.Item;
 import ucf.assignments.Models.ItemModel;
 import ucf.assignments.SceneManager;
-import ucf.assignments.TreeTableFactories.DateFactory;
-import ucf.assignments.TreeTableFactories.NameFactory;
-import ucf.assignments.TreeTableFactories.PriceFactory;
-import ucf.assignments.TreeTableFactories.SerialNumberFactory;
+import ucf.assignments.TreeTableFactories.*;
 
 import java.io.File;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class MainController {
 
@@ -53,6 +52,8 @@ public class MainController {
     private final SceneManager sceneManager;
     private final ItemModel itemModel;
     private final EditItemController editItemController;
+    private final Collection<JFXTreeTableColumn<ucf.assignments.Models.Item, ?>> columns = new ArrayList<>();
+
 
     public MainController(ItemModel itemModel, EditItemController editItemController, SceneManager sceneManager) {
         this.itemModel = itemModel;
@@ -60,36 +61,57 @@ public class MainController {
         this.editItemController = editItemController;
     }
 
+
+    //DatePicker throws NullPointerException when the value is null
     public void initialize() {
         exitBtn.setOnAction(this::exitProgram);
+
         importItemsBtn.setOnAction(this::importFile);
+
         exportItemsBtn.setOnAction(this::exportFile);
 
+        addItemBtn.setOnAction(this::setOnActionAddItemBtn);
+
+        Callback<TreeTableColumn<Item, LocalDate>, TreeTableCell<Item, LocalDate>> dateFactory = param -> new DateFactory();
+        Callback<TreeTableColumn<Item, String>, TreeTableCell<Item, String>> nameFactory = param -> new NameFactory();
+        Callback<TreeTableColumn<Item, String>, TreeTableCell<Item, String>> priceFactory = param -> new PriceFactory();
+        Callback<TreeTableColumn<Item, String>, TreeTableCell<Item, String>> serialNumberFactory = param -> new SerialNumberFactory();
+
+        JFXTreeTableColumn<Item, LocalDate> itemDate = initTreeTableColumn("Date", 120, "-fx-alignment: center;", dateFactory);
+        JFXTreeTableColumn<Item, String> itemName = initTreeTableColumn("Name", 200, "-fx-alignment: center;", nameFactory);
+        JFXTreeTableColumn<Item, String> itemPrice = initTreeTableColumn("Price", 100, "-fx-alignment: center", priceFactory);
+        JFXTreeTableColumn<Item, String> itemSerialNumber = initTreeTableColumn("Serial Number", 200, "-fx-alignment: center", serialNumberFactory);
+
+        itemDate.setCellValueFactory(param -> param.getValue().getValue().getDate());
+        itemName.setCellValueFactory(param -> param.getValue().getValue().getName());
+        itemSerialNumber.setCellValueFactory(param -> param.getValue().getValue().getSerialNumber());
+        itemPrice.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getPrice().getValue().toString()));
+
+        itemDate.setOnEditCommit(cellEditEvent ->
+            cellEditEvent.getTreeTableView().getTreeItem(cellEditEvent.getTreeTablePosition().getRow()).getValue().setDate(cellEditEvent.getNewValue()));
+
+        itemName.setOnEditCommit(cellEditEvent ->
+                cellEditEvent.getTreeTableView().getTreeItem(cellEditEvent.getTreeTablePosition().getRow()).getValue().setName(cellEditEvent.getNewValue()));
+
+        itemPrice.setOnEditCommit(cellEditEvent ->
+                cellEditEvent.getTreeTableView().getTreeItem(cellEditEvent.getTreeTablePosition().getRow()).getValue().setPrice(Double.parseDouble(cellEditEvent.getNewValue())));
+
+        itemSerialNumber.setOnEditCommit(cellEditEvent ->
+                cellEditEvent.getTreeTableView().getTreeItem(cellEditEvent.getTreeTablePosition().getRow()).getValue().setSerialNumber(cellEditEvent.getNewValue()));
+
+        initItemTable();
+    }
+
+    private void initItemTable() {
+        TreeItem<Item> items = new RecursiveTreeItem<>(itemModel.getItemObservable(), RecursiveTreeObject::getChildren);
+
+        itemTable.setRoot(items);
+        itemTable.setShowRoot(false);
         itemTable.setEditable(true);
+        itemTable.getColumns().setAll(columns);
 
-        addItemBtn.setOnAction(event -> {
-            Stage window = new Stage();
-            window.initModality(Modality.APPLICATION_MODAL);
-            window.setTitle("Add Item");
-
-            window.setScene(sceneManager.getScene("AddItemView"));
-            window.showAndWait();
-        });
-
-        Callback<TreeTableColumn<Item, LocalDate>, TreeTableCell<Item, LocalDate>> dateCellFactory
-                = (TreeTableColumn<Item, LocalDate> param) -> new DateFactory();
-
-        Callback<TreeTableColumn<Item, String>, TreeTableCell<Item, String>> nameCellFactory
-                = (TreeTableColumn<Item, String> param) -> new NameFactory();
-
-        Callback<TreeTableColumn<Item, String>, TreeTableCell<Item, String>> serialNumberCellFactory
-                = (TreeTableColumn<Item, String> param) -> new SerialNumberFactory();
-
-        Callback<TreeTableColumn<Item, String>, TreeTableCell<Item, String>> priceCellFactory
-                = (TreeTableColumn<Item, String> param) -> new PriceFactory();
-
-        itemTable.setRowFactory((Callback<TreeTableView, TreeTableRow>) param -> {
-            final TreeTableRow<Item> row = new JFXTreeTableRow<>();
+        itemTable.setRowFactory((Callback<TreeTableView<ucf.assignments.Models.Item>, TreeTableRow<ucf.assignments.Models.Item>>) param -> {
+            final TreeTableRow<ucf.assignments.Models.Item> row = new JFXTreeTableRow<>();
             final ContextMenu rowMenu = new ContextMenu();
 
             rowMenu.setOnShown(event -> rowMenu.show(row, Side.RIGHT, -row.getWidth(), row.getHeight()));
@@ -97,20 +119,9 @@ public class MainController {
             MenuItem editItem = new MenuItem("Edit");
             MenuItem removeItem = new MenuItem("Delete");
 
-            editItem.setOnAction(event -> {
-                Stage window = new Stage();
-                window.initModality(Modality.APPLICATION_MODAL);
-                window.setTitle("Edit");
+            editItem.setOnAction(actionEvent -> setOnActionEditItemBtn(actionEvent, row));
 
-                window.setScene(sceneManager.getScene("EditItemView"));
-                editItemController.initialize(row.getItem());
-                window.showAndWait();
-            });
-
-            removeItem.setOnAction(event -> {
-                itemModel.getItemObservable().remove(row.getItem());
-                itemTable.getSelectionModel().clearSelection();
-            });
+            removeItem.setOnAction(actionEvent -> setOnActionRemoveItemBtn(actionEvent, row));
 
             rowMenu.getItems().add(editItem);
             rowMenu.getItems().add(removeItem);
@@ -118,55 +129,45 @@ public class MainController {
             row.contextMenuProperty().bind(Bindings.when(Bindings.isNotNull(row.itemProperty()))
                     .then(rowMenu)
                     .otherwise((ContextMenu)null));
+
             return row;
         });
+    }
 
-        JFXTreeTableColumn<Item, LocalDate> itemDate = new JFXTreeTableColumn<>("DATE");
-        itemDate.setPrefWidth(120);
-        itemDate.setStyle("-fx-alignment: center;");
+    private <T> JFXTreeTableColumn<Item, T> initTreeTableColumn(String name, int width, String style, Callback<TreeTableColumn<Item, T>, TreeTableCell<Item, T>> factory) {
+        JFXTreeTableColumn<Item, T> column = new JFXTreeTableColumn<>(name);
+        column.setPrefWidth(width);
+        column.setStyle(style);
 
-        itemDate.setCellValueFactory(param -> param.getValue().getValue().getDate());
+        column.setCellFactory(factory);
 
-        itemDate.setCellFactory(dateCellFactory);
-        itemDate.setOnEditCommit(cellEditEvent ->
-            cellEditEvent.getTreeTableView().getTreeItem(cellEditEvent.getTreeTablePosition().getRow()).getValue().setDate(cellEditEvent.getNewValue()));
+        columns.add(column);
 
+        return column;
+    }
 
-        JFXTreeTableColumn<Item, String> itemName = new JFXTreeTableColumn<>("NAME");
-        itemName.setStyle("-fx-alignment: center;");
-        itemName.setPrefWidth(200);
-        itemName.setResizable(false);
-        itemName.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getName().getValue()));
+    private void setOnActionRemoveItemBtn(ActionEvent actionEvent, TreeTableRow<ucf.assignments.Models.Item> row) {
+        itemModel.getItemObservable().remove(row.getItem());
+        itemTable.getSelectionModel().clearSelection();
+    }
 
-        itemName.setCellFactory(nameCellFactory);
-        itemName.setOnEditCommit(cellEditEvent ->
-                cellEditEvent.getTreeTableView().getTreeItem(cellEditEvent.getTreeTablePosition().getRow()).getValue().setName(cellEditEvent.getNewValue()));
+    private void setOnActionEditItemBtn(ActionEvent actionEvent, TreeTableRow<ucf.assignments.Models.Item> row) {
+        Stage window = new Stage();
+        window.initModality(Modality.APPLICATION_MODAL);
+        window.setTitle("Edit");
 
+        window.setScene(sceneManager.getScene("EditItemView"));
+        editItemController.initialize(row.getItem());
+        window.showAndWait();
+    }
 
-        JFXTreeTableColumn<Item, String> itemPrice = new JFXTreeTableColumn<>("PRICE");
-        itemPrice.setStyle("-fx-alignment: center;");
-        itemPrice.setPrefWidth(100);
-        itemPrice.setCellValueFactory(param -> new SimpleStringProperty(Double.toString(param.getValue().getValue().getPrice().getValue())));
+    private void setOnActionAddItemBtn(ActionEvent event) {
+        Stage window = new Stage();
+        window.initModality(Modality.APPLICATION_MODAL);
+        window.setTitle("Add Item");
 
-        itemPrice.setCellFactory(priceCellFactory);
-        itemPrice.setOnEditCommit(cellEditEvent ->
-                cellEditEvent.getTreeTableView().getTreeItem(cellEditEvent.getTreeTablePosition().getRow()).getValue().setPrice(Double.parseDouble(cellEditEvent.getNewValue())));
-
-        JFXTreeTableColumn<Item, String> itemSerialNumber = new JFXTreeTableColumn<>("SERIAL NUMBER");
-        itemSerialNumber.setStyle("-fx-alignment: center;");
-        itemSerialNumber.setPrefWidth(200);
-        //
-        itemSerialNumber.setCellValueFactory(param -> param.getValue().getValue().getSerialNumber());
-
-        itemSerialNumber.setCellFactory(serialNumberCellFactory);
-        itemSerialNumber.setOnEditCommit(cellEditEvent ->
-                cellEditEvent.getTreeTableView().getTreeItem(cellEditEvent.getTreeTablePosition().getRow()).getValue().setSerialNumber(cellEditEvent.getNewValue()));
-
-
-        TreeItem<Item> test = new RecursiveTreeItem<>(itemModel.getItemObservable(), RecursiveTreeObject::getChildren);
-        itemTable.getColumns().setAll(itemDate, itemName, itemSerialNumber, itemPrice);
-        itemTable.setRoot(test);
-        itemTable.setShowRoot(false);
+        window.setScene(sceneManager.getScene("AddItemView"));
+        window.showAndWait();
     }
 
     private void exitProgram(ActionEvent actionEvent) {
@@ -175,6 +176,7 @@ public class MainController {
         Platform.exit();
         System.exit(0);
     }
+
 
     private void exportFile(ActionEvent actionEvent) {
         FileChooser fileChooser = new FileChooser();

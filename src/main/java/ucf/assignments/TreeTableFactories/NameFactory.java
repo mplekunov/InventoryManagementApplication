@@ -2,6 +2,8 @@ package ucf.assignments.TreeTableFactories;
 
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.cells.editors.base.JFXTreeTableCell;
+import javafx.event.Event;
+import javafx.scene.control.*;
 import ucf.assignments.Models.Item;
 
 public class NameFactory extends JFXTreeTableCell<Item, String> {
@@ -54,5 +56,9 @@ public class NameFactory extends JFXTreeTableCell<Item, String> {
         textField = new JFXTextField(getText());
         textField.setMinWidth(this.getWidth());
         textField.setOnAction(e -> commitEdit(textField.getText()));
+        textField.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if(!newValue)
+                commitEdit(textField.getText());
+        });
     }
 }

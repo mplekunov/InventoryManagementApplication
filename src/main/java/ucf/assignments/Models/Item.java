@@ -2,19 +2,14 @@ package ucf.assignments.Models;
 
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import javafx.beans.property.*;
-import javafx.beans.value.ObservableDoubleValue;
-import javafx.beans.value.ObservableStringValue;
-import javafx.beans.value.ObservableValue;
-
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Objects;
 
 public class Item extends RecursiveTreeObject<Item> {
-    private SimpleObjectProperty<LocalDate> date;
-    private SimpleDoubleProperty price;
-    private SimpleStringProperty serialNumber;
-    private SimpleStringProperty name;
+    private final SimpleObjectProperty<LocalDate> date;
+    private final SimpleDoubleProperty price;
+    private final SimpleStringProperty serialNumber;
+    private final SimpleStringProperty name;
 
     private int id;
 
