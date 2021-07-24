@@ -51,7 +51,7 @@
                   <Separator layoutX="10.0" layoutY="74.0" />
                   <AnchorPane id="dashboardPane">
                      <children>
-                        <JFXButton fx:id="dashboardBtn" alignment="BASELINE_LEFT" graphicTextGap="24.0" prefHeight="32.0" text="DASHBOARD" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <JFXButton fx:id="dashboardBtn" focusTraversable="false" alignment="BASELINE_LEFT" graphicTextGap="24.0" prefHeight="32.0" text="DASHBOARD" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <graphic>
                               <ImageView fitHeight="150.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -68,7 +68,7 @@
                   <Separator />
                   <AnchorPane id="inventoryPane" layoutX="10.0" layoutY="60.0">
                      <children>
-                        <JFXButton fx:id="inventoryBtn" alignment="BASELINE_LEFT" graphicTextGap="24.0" prefHeight="32.0" text="INVENTORY" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <JFXButton fx:id="inventoryBtn" focusTraversable="false" alignment="BASELINE_LEFT" graphicTextGap="24.0" prefHeight="32.0" text="INVENTORY" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <padding>
                               <Insets left="12.0" />
                            </padding>
@@ -85,7 +85,7 @@
                   <Separator layoutX="10.0" layoutY="44.0" />
                   <AnchorPane id="exitPane" layoutX="10.0" layoutY="44.0">
                      <children>
-                        <JFXButton fx:id="exitBtn" alignment="BASELINE_LEFT" graphicTextGap="24.0" prefHeight="32.0" text="EXIT" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <JFXButton fx:id="exitBtn" focusTraversable="false" alignment="BASELINE_LEFT" graphicTextGap="24.0" prefHeight="32.0" text="EXIT" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <padding>
                               <Insets left="12.0" />
                            </padding>
@@ -114,9 +114,9 @@
                      <children>
                         <HBox prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
-                              <AnchorPane id="exitPane">
+                              <AnchorPane id="directoryPane">
                                  <children>
-                                    <JFXButton fx:id="exitBtn1" alignment="BASELINE_LEFT" buttonType="RAISED" contentDisplay="RIGHT" graphicTextGap="0.0" prefHeight="32.0" ripplerFill="TRANSPARENT" text="Home" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="24.0" AnchorPane.topAnchor="0.0" />
+                                    <JFXButton fx:id="homeBtn" focusTraversable="false" alignment="BASELINE_LEFT" buttonType="RAISED" contentDisplay="RIGHT" graphicTextGap="0.0" prefHeight="32.0" ripplerFill="TRANSPARENT" text="Home" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="24.0" AnchorPane.topAnchor="0.0" />
                                     <ImageView fitHeight="150.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="4.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="4.0">
                                        <image>
                                           <Image url="@../icons/more_than.png" />
@@ -138,17 +138,17 @@
                                        <children>
                                           <AnchorPane layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0">
                                              <children>
-                                                <JFXButton fx:id="addItemBtn" buttonType="RAISED" style="-fx-background-color: aqua;" text="Add" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                                <JFXButton fx:id="addItemBtn" focusTraversable="false" buttonType="RAISED" style="-fx-background-color: aqua;" text="Add" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                              </children>
                                           </AnchorPane>
                                           <AnchorPane prefHeight="200.0" prefWidth="200.0">
                                              <children>
-                                                <JFXButton fx:id="importItemsBtn" buttonType="RAISED" style="-fx-background-color: aqua;" text="Import" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                                <JFXButton fx:id="importItemsBtn" focusTraversable="false" buttonType="RAISED" style="-fx-background-color: aqua;" text="Import" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                              </children>
                                           </AnchorPane>
                                           <AnchorPane prefHeight="200.0" prefWidth="200.0">
                                              <children>
-                                                <JFXButton fx:id="exportItemsBtn" buttonType="RAISED" style="-fx-background-color: aqua;" text="Export" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                                <JFXButton fx:id="exportItemsBtn" focusTraversable="false" buttonType="RAISED" style="-fx-background-color: aqua;" text="Export" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                              </children>
                                           </AnchorPane>
                                        </children>
@@ -176,7 +176,7 @@
                               <AnchorPane prefHeight="40.0" style="-fx-background-color: gainsboro;">
                                  <children>
                                     <JFXComboBox layoutX="47.0" layoutY="8.0" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="8.0" AnchorPane.topAnchor="8.0" />
-                                    <JFXTextField fx:id="searchField" promptText="Search" layoutX="822.0" layoutY="8.0" prefWidth="200.0" AnchorPane.bottomAnchor="8.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="8.0" />
+                                    <JFXTextField fx:id="searchTextField" focusTraversable="false" promptText="Search" layoutX="822.0" layoutY="8.0" prefWidth="200.0" AnchorPane.bottomAnchor="8.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="8.0" />
                                  </children>
                               </AnchorPane>
                               <JFXTreeTableView fx:id="itemTable" />
