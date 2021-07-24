@@ -50,15 +50,27 @@ public class NameFactory extends JFXTreeTableCell<Item, String> {
         }
     }
 
-    private String getName() {return getItem() == null ? "" : getItem(); }
+    @Override
+    public void commitEdit(String newValue) {
+        if (!newValue.isEmpty())
+            super.commitEdit(newValue);
+        else {
+            textField.requestFocus();
+            System.out.println("Empty");
+        }
+    }
+
+    private String getName() {return getItem() == null ? null : getItem(); }
 
     private void createTextField() {
         textField = new JFXTextField(getText());
         textField.setMinWidth(this.getWidth());
+
         textField.setOnAction(e -> commitEdit(textField.getText()));
+
         textField.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if(!newValue)
-                commitEdit(textField.getText());
+                cancelEdit();
         });
     }
 }

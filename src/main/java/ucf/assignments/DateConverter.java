@@ -9,7 +9,7 @@ public final class DateConverter{
     private DateConverter() {}
 
     public static LocalDate toDate(String date) {
-        return LocalDate.parse(date, dtf);
+        return !date.isEmpty() ? LocalDate.parse(date, dtf) : null;
     }
 
     public static String toString(LocalDate date) {

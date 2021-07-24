@@ -55,6 +55,13 @@ public class Item extends RecursiveTreeObject<Item> {
         this.price.set(price);
     }
 
+    public void setPrice(String price) {
+        if (price == null || price.isEmpty())
+            this.price.set(0);
+        else
+            this.price.set(Double.parseDouble(price));
+    }
+
     public void setSerialNumber(String serialNumber) {
         this.serialNumber.setValue(serialNumber);
     }

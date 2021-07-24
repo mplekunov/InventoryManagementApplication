@@ -61,8 +61,17 @@ public class MainController {
         this.editItemController = editItemController;
     }
 
-
-    //DatePicker throws NullPointerException when the value is null
+    //Fix all problems related to when user enters null value to any of the cells (Cell Fixed, Add menu wasn't touched yet)
+    //Add error message to the serialNumber cell when cell with similar serial number will be found
+    //Prohibit null value for Name/SerialNumber cells
+    //Complete Add new item menu (Backend)
+    //Fix Import/Export (make them update database when it's needed)
+    //Import/Export should save file (ideally in both) TSV or HTML table format
+    //make it so when u press on the cell "one time" it immediately changes focus to the textfield
+    //Add Search by Name/SerialNumber feature
+    //Fix UI interface
+    //Add TestCases
+    //Add Class Diagram
     public void initialize() {
         exitBtn.setOnAction(this::exitProgram);
 
@@ -75,7 +84,7 @@ public class MainController {
         Callback<TreeTableColumn<Item, LocalDate>, TreeTableCell<Item, LocalDate>> dateFactory = param -> new DateFactory();
         Callback<TreeTableColumn<Item, String>, TreeTableCell<Item, String>> nameFactory = param -> new NameFactory();
         Callback<TreeTableColumn<Item, String>, TreeTableCell<Item, String>> priceFactory = param -> new PriceFactory();
-        Callback<TreeTableColumn<Item, String>, TreeTableCell<Item, String>> serialNumberFactory = param -> new SerialNumberFactory();
+        Callback<TreeTableColumn<Item, String>, TreeTableCell<Item, String>> serialNumberFactory = param -> new SerialNumberFactory(itemModel.getItemObservable());
 
         JFXTreeTableColumn<Item, LocalDate> itemDate = initTreeTableColumn("Date", 120, "-fx-alignment: center;", dateFactory);
         JFXTreeTableColumn<Item, String> itemName = initTreeTableColumn("Name", 200, "-fx-alignment: center;", nameFactory);
@@ -87,17 +96,14 @@ public class MainController {
         itemSerialNumber.setCellValueFactory(param -> param.getValue().getValue().getSerialNumber());
         itemPrice.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getPrice().getValue().toString()));
 
-        itemDate.setOnEditCommit(cellEditEvent ->
-            cellEditEvent.getTreeTableView().getTreeItem(cellEditEvent.getTreeTablePosition().getRow()).getValue().setDate(cellEditEvent.getNewValue()));
-
-        itemName.setOnEditCommit(cellEditEvent ->
-                cellEditEvent.getTreeTableView().getTreeItem(cellEditEvent.getTreeTablePosition().getRow()).getValue().setName(cellEditEvent.getNewValue()));
-
-        itemPrice.setOnEditCommit(cellEditEvent ->
-                cellEditEvent.getTreeTableView().getTreeItem(cellEditEvent.getTreeTablePosition().getRow()).getValue().setPrice(Double.parseDouble(cellEditEvent.getNewValue())));
-
-        itemSerialNumber.setOnEditCommit(cellEditEvent ->
-                cellEditEvent.getTreeTableView().getTreeItem(cellEditEvent.getTreeTablePosition().getRow()).getValue().setSerialNumber(cellEditEvent.getNewValue()));
+//        itemDate.setOnEditCommit(cellEditEvent ->
+//            cellEditEvent.getTreeTableView().getTreeItem(cellEditEvent.getTreeTablePosition().getRow()).getValue().setDate(cellEditEvent.getNewValue()));
+//
+//        itemName.setOnEditCommit(cellEditEvent ->
+//                cellEditEvent.getTreeTableView().getTreeItem(cellEditEvent.getTreeTablePosition().getRow()).getValue().setName(cellEditEvent.getNewValue()));
+//
+//        itemPrice.setOnEditCommit(cellEditEvent ->
+//                cellEditEvent.getTreeTableView().getTreeItem(cellEditEvent.getTreeTablePosition().getRow()).getValue().setPrice(cellEditEvent.getNewValue()));
 
         initItemTable();
     }

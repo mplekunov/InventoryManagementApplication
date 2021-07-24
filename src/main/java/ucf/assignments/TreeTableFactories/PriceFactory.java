@@ -53,7 +53,7 @@ public class PriceFactory extends JFXTreeTableCell<Item, String> {
 
 
     private String getSerialNumber() {
-        return getItem() == null ? "" : getItem();
+        return getItem() == null || getItem().isEmpty() ? "0" : getItem();
     }
 
     private void createTextField() {

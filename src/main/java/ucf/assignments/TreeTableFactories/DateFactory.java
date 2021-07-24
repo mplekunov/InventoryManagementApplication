@@ -28,7 +28,11 @@ public class DateFactory extends JFXTreeTableCell<Item, LocalDate> {
     public void cancelEdit() {
         super.cancelEdit();
 
-        setText(getDate().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)));
+        String date = null;
+        if (getDate() != null)
+            date = getDate().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM));
+
+        setText(date);
         setGraphic(null);
     }
 
@@ -47,24 +51,30 @@ public class DateFactory extends JFXTreeTableCell<Item, LocalDate> {
                 setText(null);
                 setGraphic(datePicker);
             } else {
-                setText(getDate().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)));
+                String date = null;
+                if (getDate() != null)
+                    date = getDate().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM));
+
+                setText(date);
                 setGraphic(null);
             }
         }
     }
 
     private LocalDate getDate() {
-        return getItem() == null ? LocalDate.now() : getItem();
+        return getItem() == null ? null : getItem();
     }
 
     private void createDatePicker() {
         datePicker = new JFXDatePicker(getDate());
         datePicker.setMinWidth(this.getWidth() - this.getGraphicTextGap() * 2);
-        datePicker.setOnAction(e -> commitEdit(LocalDate.from(datePicker.getValue())));
+
+        datePicker.setOnAction(e -> commitEdit(datePicker.getValue()));
         datePicker.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue)
-                commitEdit(LocalDate.from(datePicker.getValue()));
+                commitEdit(datePicker.getValue());
         });
+
     }
 }
 
