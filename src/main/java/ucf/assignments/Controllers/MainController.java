@@ -5,7 +5,8 @@ import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Side;
@@ -25,6 +26,7 @@ import java.io.File;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 public class MainController {
 
@@ -61,15 +63,13 @@ public class MainController {
         this.editItemController = editItemController;
     }
 
-    //Fix all problems related to when user enters null value to any of the cells (Cell Fixed, Add menu wasn't touched yet)
-    //Add error message to the serialNumber cell when cell with similar serial number will be found (Checked)
+    //Add Search by Name/SerialNumber feature (Added, one bug)
 
-    //Complete Add new item menu (Backend)
 
     //Fix Import/Export (make them update database when it's needed)
+
     //Import/Export should save file (ideally in both) TSV or HTML table format
-    //make it so when u press on the cell "one time" it immediately changes focus to the textfield
-    //Add Search by Name/SerialNumber feature
+
     //Fix UI interface
     //Add TestCases
     //Add Class Diagram
@@ -85,7 +85,7 @@ public class MainController {
         Callback<TreeTableColumn<Item, LocalDate>, TreeTableCell<Item, LocalDate>> dateFactory = param -> new DateFactory();
         Callback<TreeTableColumn<Item, String>, TreeTableCell<Item, String>> nameFactory = param -> new NameFactory();
         Callback<TreeTableColumn<Item, String>, TreeTableCell<Item, String>> priceFactory = param -> new PriceFactory();
-        Callback<TreeTableColumn<Item, String>, TreeTableCell<Item, String>> serialNumberFactory = param -> new SerialNumberFactory(itemModel.getItemObservable());
+        Callback<TreeTableColumn<Item, String>, TreeTableCell<Item, String>> serialNumberFactory = param -> new SerialNumberFactory(itemModel.getAllItems());
 
         JFXTreeTableColumn<Item, LocalDate> itemDate = initTreeTableColumn("Date", 120, "-fx-alignment: center;", dateFactory);
         JFXTreeTableColumn<Item, String> itemName = initTreeTableColumn("Name", 200, "-fx-alignment: center;", nameFactory);
@@ -97,19 +97,34 @@ public class MainController {
         itemSerialNumber.setCellValueFactory(param -> param.getValue().getValue().getSerialNumber());
         itemPrice.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getPrice().getValue().toString()));
 
-        initItemTable();
+        searchTextField.textProperty().addListener((observable, oldValue, newValue) -> addSearchTexFieldListener());
+
+        initItemTable(itemModel.getAllItems());
     }
 
-    private void initItemTable() {
-        TreeItem<Item> items = new RecursiveTreeItem<>(itemModel.getItemObservable(), RecursiveTreeObject::getChildren);
+    private void addSearchTexFieldListener() {
+        String searchBar = searchTextField.getText();
+
+        if (!searchBar.isEmpty()) {
+            var test = itemModel.getAllItems().stream()
+                    .filter(item -> item.getName().getValue().contains(searchBar) || item.getSerialNumber().getValue().contains(searchBar))
+                    .collect(Collectors.toCollection(FXCollections::observableArrayList));
+
+            initItemTable(test);
+        } else
+            initItemTable(itemModel.getAllItems());
+    }
+
+    private void initItemTable(ObservableList<Item> itemObservableList) {
+        TreeItem<Item> items = new RecursiveTreeItem<>(itemObservableList, RecursiveTreeObject::getChildren);
 
         itemTable.setRoot(items);
         itemTable.setShowRoot(false);
         itemTable.setEditable(true);
         itemTable.getColumns().setAll(columns);
 
-        itemTable.setRowFactory((Callback<TreeTableView<ucf.assignments.Models.Item>, TreeTableRow<ucf.assignments.Models.Item>>) param -> {
-            final TreeTableRow<ucf.assignments.Models.Item> row = new JFXTreeTableRow<>();
+        itemTable.setRowFactory((Callback<TreeTableView<Item>, TreeTableRow<Item>>) param -> {
+            final TreeTableRow<Item> row = new JFXTreeTableRow<>();
             final ContextMenu rowMenu = new ContextMenu();
 
             rowMenu.setOnShown(event -> rowMenu.show(row, Side.RIGHT, -row.getWidth(), row.getHeight()));
@@ -145,7 +160,7 @@ public class MainController {
     }
 
     private void setOnActionRemoveItemBtn(ActionEvent actionEvent, TreeTableRow<ucf.assignments.Models.Item> row) {
-        itemModel.getItemObservable().remove(row.getItem());
+        itemModel.getAllItems().remove(row.getItem());
         itemTable.getSelectionModel().clearSelection();
     }
 
@@ -190,7 +205,7 @@ public class MainController {
 
 //        toDoListModel.upload(database);
 
-        if (!itemModel.getItemObservable().isEmpty()) {
+        if (!itemModel.getAllItems().isEmpty()) {
             File file = fileChooser.showSaveDialog(mainPane.getScene().getWindow());
 
             if (file != null) {

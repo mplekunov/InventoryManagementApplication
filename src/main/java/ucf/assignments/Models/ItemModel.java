@@ -32,7 +32,7 @@ public class ItemModel {
         itemObservable.addListener(this::addListChangeListener);
     }
 
-    public ObservableList<Item> getItemObservable() {
+    public ObservableList<Item> getAllItems() {
         return itemObservable;
     }
 
@@ -49,7 +49,8 @@ public class ItemModel {
                 }
             } else if (listener.wasUpdated()) {
                 for (int i = listener.getFrom(); i < listener.getTo(); i++)
-                    itemCollection.put(itemObservable.get(i), DataState.Updated);
+                    if (itemCollection.get(itemObservable.get(i)) != DataState.Added)
+                        itemCollection.put(itemObservable.get(i), DataState.Updated);
             } else {
                 for (Item removed : listener.getRemoved())
                     itemCollection.put(removed, DataState.Removed);

@@ -80,7 +80,7 @@ public class Database {
             connection = DriverManager.getConnection(connectionString);
             Statement statement = connection.createStatement();
 
-            String query = "INSERT INTO Items VALUES('%s', '%s', '%lf', '%s')";
+            String query = "INSERT INTO Items VALUES('%s', '%s', '%f', '%s')";
             statement.execute(
                     String.format(query,
                             item.getSerialNumber().getValue(),
