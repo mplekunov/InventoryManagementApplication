@@ -62,9 +62,10 @@ public class MainController {
     }
 
     //Fix all problems related to when user enters null value to any of the cells (Cell Fixed, Add menu wasn't touched yet)
-    //Add error message to the serialNumber cell when cell with similar serial number will be found
-    //Prohibit null value for Name/SerialNumber cells
+    //Add error message to the serialNumber cell when cell with similar serial number will be found (Checked)
+
     //Complete Add new item menu (Backend)
+
     //Fix Import/Export (make them update database when it's needed)
     //Import/Export should save file (ideally in both) TSV or HTML table format
     //make it so when u press on the cell "one time" it immediately changes focus to the textfield
@@ -95,15 +96,6 @@ public class MainController {
         itemName.setCellValueFactory(param -> param.getValue().getValue().getName());
         itemSerialNumber.setCellValueFactory(param -> param.getValue().getValue().getSerialNumber());
         itemPrice.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getPrice().getValue().toString()));
-
-//        itemDate.setOnEditCommit(cellEditEvent ->
-//            cellEditEvent.getTreeTableView().getTreeItem(cellEditEvent.getTreeTablePosition().getRow()).getValue().setDate(cellEditEvent.getNewValue()));
-//
-//        itemName.setOnEditCommit(cellEditEvent ->
-//                cellEditEvent.getTreeTableView().getTreeItem(cellEditEvent.getTreeTablePosition().getRow()).getValue().setName(cellEditEvent.getNewValue()));
-//
-//        itemPrice.setOnEditCommit(cellEditEvent ->
-//                cellEditEvent.getTreeTableView().getTreeItem(cellEditEvent.getTreeTablePosition().getRow()).getValue().setPrice(cellEditEvent.getNewValue()));
 
         initItemTable();
     }

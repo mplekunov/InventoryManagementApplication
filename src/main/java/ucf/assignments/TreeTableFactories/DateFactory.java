@@ -18,9 +18,12 @@ public class DateFactory extends JFXTreeTableCell<Item, LocalDate> {
     public void startEdit() {
         if (!isEmpty()) {
             super.startEdit();
+
             createDatePicker();
             setText(null);
+
             setGraphic(datePicker);
+            datePicker.requestFocus();
         }
     }
 
@@ -67,9 +70,10 @@ public class DateFactory extends JFXTreeTableCell<Item, LocalDate> {
 
     private void createDatePicker() {
         datePicker = new JFXDatePicker(getDate());
-        datePicker.setMinWidth(this.getWidth() - this.getGraphicTextGap() * 2);
+        datePicker.setMinWidth(this.getWidth());
 
         datePicker.setOnAction(e -> commitEdit(datePicker.getValue()));
+
         datePicker.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue)
                 commitEdit(datePicker.getValue());

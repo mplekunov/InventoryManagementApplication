@@ -15,9 +15,13 @@ public class PriceFactory extends JFXTreeTableCell<Item, String> {
     public void startEdit() {
         if (!isEmpty()) {
             super.startEdit();
+
             createTextField();
             setText(null);
+
             setGraphic(textField);
+            textField.requestFocus();
+            textField.positionCaret(getPrice().length());
         }
     }
 
@@ -25,7 +29,7 @@ public class PriceFactory extends JFXTreeTableCell<Item, String> {
     public void cancelEdit() {
         super.cancelEdit();
 
-        setText(NumberFormat.getCurrencyInstance().format(Double.parseDouble(textField.getText())));
+        setText(NumberFormat.getCurrencyInstance().format(Double.parseDouble(getPrice())));
         setGraphic(null);
     }
 
@@ -44,25 +48,25 @@ public class PriceFactory extends JFXTreeTableCell<Item, String> {
                 setGraphic(null);
                 setGraphic(textField);
             } else {
-                setText(NumberFormat.getCurrencyInstance().format(Double.parseDouble(getSerialNumber())));
+                setText(NumberFormat.getCurrencyInstance().format(Double.parseDouble(getPrice())));
                 setGraphic(null);
             }
         }
     }
 
-
-
-    private String getSerialNumber() {
+    private String getPrice() {
         return getItem() == null || getItem().isEmpty() ? "0" : getItem();
     }
 
     private void createTextField() {
-        textField = new JFXTextField(getText().replaceAll("\\$", ""));
+        textField = new JFXTextField(getItem());
         textField.setMinWidth(this.getWidth());
+
         textField.setOnAction(e -> commitEdit(textField.getText()));
+
         textField.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if(!newValue)
-                commitEdit(textField.getText());
+                cancelEdit();
         });
     }
 }

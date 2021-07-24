@@ -30,7 +30,7 @@ public class SerialNumberFactory extends JFXTreeTableCell<Item, String> {
 
             setGraphic(textField);
             textField.requestFocus();
-            textField.positionCaret(getItem().length());
+            textField.positionCaret(getSerialNumber().length());
         }
     }
 
@@ -80,11 +80,11 @@ public class SerialNumberFactory extends JFXTreeTableCell<Item, String> {
     }
 
     private String getSerialNumber() {
-        return getItem() == null ? null : getItem();
+        return getItem() == null ? "" : getItem();
     }
 
     private void createTextField() {
-        textField = new JFXTextField(getText());
+        textField = new JFXTextField(getSerialNumber());
         textField.setMinWidth(this.getWidth());
 
         textField.setOnAction(e -> commitEdit(textField.getText()));

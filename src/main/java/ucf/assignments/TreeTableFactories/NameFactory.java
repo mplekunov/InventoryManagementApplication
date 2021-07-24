@@ -15,9 +15,13 @@ public class NameFactory extends JFXTreeTableCell<Item, String> {
     public void startEdit() {
         if (!isEmpty()) {
             super.startEdit();
+
             createTextField();
             setText(null);
+
             setGraphic(textField);
+            textField.requestFocus();
+            textField.positionCaret(getName().length());
         }
     }
 
@@ -25,7 +29,7 @@ public class NameFactory extends JFXTreeTableCell<Item, String> {
     public void cancelEdit() {
         super.cancelEdit();
 
-        setText(textField.getText());
+        setText(getItem());
         setGraphic(null);
     }
 
@@ -60,10 +64,10 @@ public class NameFactory extends JFXTreeTableCell<Item, String> {
         }
     }
 
-    private String getName() {return getItem() == null ? null : getItem(); }
+    private String getName() {return getItem() == null ? "" : getItem(); }
 
     private void createTextField() {
-        textField = new JFXTextField(getText());
+        textField = new JFXTextField(getItem());
         textField.setMinWidth(this.getWidth());
 
         textField.setOnAction(e -> commitEdit(textField.getText()));
