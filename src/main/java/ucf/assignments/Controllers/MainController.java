@@ -17,6 +17,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
+import ucf.assignments.Converters.TSVConverter;
+import ucf.assignments.File.FileManager;
 import ucf.assignments.Models.Item;
 import ucf.assignments.Models.ItemModel;
 import ucf.assignments.SceneManager;
@@ -26,6 +28,7 @@ import java.io.File;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class MainController {
@@ -62,11 +65,6 @@ public class MainController {
         this.sceneManager = sceneManager;
         this.editItemController = editItemController;
     }
-
-    //Add Search by Name/SerialNumber feature (Added, one bug)
-
-
-    //Fix Import/Export (make them update database when it's needed)
 
     //Import/Export should save file (ideally in both) TSV or HTML table format
 
@@ -134,7 +132,7 @@ public class MainController {
 
             editItem.setOnAction(actionEvent -> setOnActionEditItemBtn(actionEvent, row));
 
-            removeItem.setOnAction(actionEvent -> setOnActionRemoveItemBtn(actionEvent, row));
+            removeItem.setOnAction(actionEvent -> setOnActionRemoveItemBtn(itemObservableList, row));
 
             rowMenu.getItems().add(editItem);
             rowMenu.getItems().add(removeItem);
@@ -159,12 +157,14 @@ public class MainController {
         return column;
     }
 
-    private void setOnActionRemoveItemBtn(ActionEvent actionEvent, TreeTableRow<ucf.assignments.Models.Item> row) {
-        itemModel.getAllItems().remove(row.getItem());
+    private void setOnActionRemoveItemBtn(ObservableList<Item> itemObservableList, TreeTableRow<Item> row) {
+        itemObservableList.remove(row.getItem());
+
+        itemModel.getAllItems().remove(row.getTreeItem().getValue());
         itemTable.getSelectionModel().clearSelection();
     }
 
-    private void setOnActionEditItemBtn(ActionEvent actionEvent, TreeTableRow<ucf.assignments.Models.Item> row) {
+    private void setOnActionEditItemBtn(ActionEvent actionEvent, TreeTableRow<Item> row) {
         Stage window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);
         window.setTitle("Edit");
@@ -203,21 +203,19 @@ public class MainController {
 
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Tab Separated Value", "*.tsv"));
 
-//        toDoListModel.upload(database);
+        //loads items into database file
+        itemModel.upload();
 
         if (!itemModel.getAllItems().isEmpty()) {
             File file = fileChooser.showSaveDialog(mainPane.getScene().getWindow());
 
             if (file != null) {
                 if (!file.getName().contains("."))
-                    file = new File(file.getPath() + ".sqlite");
+                    file = new File(file.getPath() + ".tsv");
 
-//                try {
-////                    Files.copy(Paths.get(database.getFilePath()), Path.of(file.getPath()), REPLACE_EXISTING);
-//                } catch (java.io.IOException e) {
-//                    e.printStackTrace();
-//                }
+                TSVConverter tsvConverter = new TSVConverter(new FileManager(file));
 
+                tsvConverter.toTSV(itemModel.getAllItems());
             } else {
                 Alert errorAlert = new Alert(Alert.AlertType.ERROR);
                 errorAlert.setHeaderText("Action is not valid");

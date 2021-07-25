@@ -12,7 +12,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
-import ucf.assignments.DateConverter;
+import ucf.assignments.Converters.DateConverter;
 import ucf.assignments.Models.Item;
 import ucf.assignments.Models.ItemModel;
 
