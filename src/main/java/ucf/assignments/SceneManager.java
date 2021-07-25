@@ -10,9 +10,7 @@ import ucf.assignments.Controllers.MainController;
 import ucf.assignments.Models.Item;
 import ucf.assignments.Models.ItemModel;
 
-import javax.swing.*;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.HashMap;
 
 public class SceneManager {

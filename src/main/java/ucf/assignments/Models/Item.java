@@ -79,7 +79,7 @@ public class Item extends RecursiveTreeObject<Item> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Item item = (Item) o;
-        return serialNumber.equals(item.serialNumber);
+        return serialNumber.getValue().equals(item.serialNumber.getValue());
     }
 
     @Override

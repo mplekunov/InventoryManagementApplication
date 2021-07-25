@@ -2,21 +2,15 @@ package ucf.assignments.Converters;
 
 import ucf.assignments.File.FileManager;
 import ucf.assignments.Models.Item;
-import ucf.assignments.Models.ItemModel;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Arrays;
-import java.util.FormatFlagsConversionMismatchException;
 import java.util.IllegalFormatFlagsException;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class TSVConverter {
     private final FileManager fileManager;
-    private final String header = "Date\tName\tSerial Number\tPrice\n";
+    private final String header = "Date\tName\tSerial Number\tPrice";
 
     public TSVConverter(FileManager fileManager) {
         this.fileManager = fileManager;
@@ -25,7 +19,7 @@ public class TSVConverter {
     public void toTSV(List<Item> table) {
         StringBuilder items = new StringBuilder(header);
         table.forEach(item -> {
-            String formattedItem = String.format("%s\t%s\t%s\t%s\n",
+            String formattedItem = String.format("\n%s\t%s\t%s\t%s",
                     DateConverter.toString(item.getDate().getValue()),
                     item.getName().getValue(),
                     item.getSerialNumber().getValue(),
@@ -40,6 +34,7 @@ public class TSVConverter {
     public List<Item> fromTSV() {
         List<String> tsvFile = fileManager.readAll();
         if (tsvFile.get(0).contains(header)) {
+            tsvFile.remove(0);
             return tsvFile.stream().map(line -> {
                 List<String> itemProperties = Arrays.stream(line.split("\t")).collect(Collectors.toList());
 

@@ -28,13 +28,13 @@ import java.io.File;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class MainController {
 
     @FXML
-    private JFXTreeTableView itemTable;
+    private JFXTreeTableView<Item> itemTable;
 
     @FXML
     private JFXTextField searchTextField;
@@ -66,9 +66,8 @@ public class MainController {
         this.editItemController = editItemController;
     }
 
-    //Import/Export should save file (ideally in both) TSV or HTML table format
-
     //Fix UI interface
+
     //Add TestCases
     //Add Class Diagram
     public void initialize() {
@@ -121,7 +120,7 @@ public class MainController {
         itemTable.setEditable(true);
         itemTable.getColumns().setAll(columns);
 
-        itemTable.setRowFactory((Callback<TreeTableView<Item>, TreeTableRow<Item>>) param -> {
+        itemTable.setRowFactory(param -> {
             final TreeTableRow<Item> row = new JFXTreeTableRow<>();
             final ContextMenu rowMenu = new ContextMenu();
 
@@ -190,7 +189,6 @@ public class MainController {
         System.exit(0);
     }
 
-
     private void exportFile(ActionEvent actionEvent) {
         FileChooser fileChooser = new FileChooser();
 
@@ -203,9 +201,6 @@ public class MainController {
 
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Tab Separated Value", "*.tsv"));
 
-        //loads items into database file
-        itemModel.upload();
-
         if (!itemModel.getAllItems().isEmpty()) {
             File file = fileChooser.showSaveDialog(mainPane.getScene().getWindow());
 
@@ -213,9 +208,24 @@ public class MainController {
                 if (!file.getName().contains("."))
                     file = new File(file.getPath() + ".tsv");
 
-                TSVConverter tsvConverter = new TSVConverter(new FileManager(file));
+                File finalFile = file;
 
-                tsvConverter.toTSV(itemModel.getAllItems());
+                Thread exportingThread = new Thread(() -> {
+                    Thread uploadingThread = new Thread(itemModel::upload);
+                    uploadingThread.start();
+
+                    try {
+                        uploadingThread.join();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    TSVConverter tsvConverter = new TSVConverter(new FileManager(finalFile));
+
+                    tsvConverter.toTSV(itemModel.getAllItems());
+                });
+
+                exportingThread.start();
             } else {
                 Alert errorAlert = new Alert(Alert.AlertType.ERROR);
                 errorAlert.setHeaderText("Action is not valid");
@@ -223,11 +233,10 @@ public class MainController {
                 errorAlert.showAndWait();
             }
         }
+
     }
 
     private void importFile(ActionEvent actionEvent) {
-        //upload model to database
-
         FileChooser fileChooser = new FileChooser();
 
         String appDir = getClass().getProtectionDomain().getCodeSource().getLocation().getPath();
@@ -242,8 +251,23 @@ public class MainController {
         File selectedFile = fileChooser.showOpenDialog(null);
 
         if (selectedFile != null) {
-//            database.setConnection(selectedFile.getAbsolutePath());
+            Thread importingThread = new Thread(() -> {
+//                Thread uploadingThread = new Thread(itemModel::upload);
+//                uploadingThread.start();
+//
+//                try {
+//                    uploadingThread.join();
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
 
+                TSVConverter tsvConverter = new TSVConverter(new FileManager(selectedFile));
+                itemModel.resetBuffer();
+//                itemModel.getAllItems().removeAll(itemModel.getAllItems());
+                itemModel.getAllItems().addAll(tsvConverter.fromTSV());
+//                tsvConverter.fromTSV().forEach(item -> itemModel.getAllItems().add(item));
+            });
+            importingThread.start();
         }
     }
 }
