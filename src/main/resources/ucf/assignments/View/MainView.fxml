@@ -226,8 +226,6 @@
                                 </AnchorPane>
                                 <AnchorPane prefHeight="40.0">
                                     <children>
-                                        <JFXComboBox layoutX="47.0" layoutY="8.0" AnchorPane.bottomAnchor="8.0"
-                                                     AnchorPane.leftAnchor="8.0" AnchorPane.topAnchor="8.0"/>
                                         <JFXTextField fx:id="searchTextField" focusTraversable="false"
                                                       promptText="Search" layoutX="822.0" layoutY="8.0"
                                                       prefWidth="200.0" AnchorPane.bottomAnchor="8.0"
