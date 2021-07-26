@@ -1,3 +1,8 @@
+/*
+ *  UCF COP3330 Summer 2021 Assignment 5 Solution
+ *  Copyright 2021 Mikhail Plekunov
+ */
+
 package ucf.assignments.Models;
 
 import javafx.beans.Observable;
@@ -6,7 +11,6 @@ import ucf.assignments.Database.DataState;
 import ucf.assignments.Database.Database;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -95,9 +99,9 @@ public class ItemModel {
                 .filter(entry -> !entry.getValue().equals(DataState.CACHED))
                 .forEach(entry -> {
                     if (entry.getValue().equals(DataState.ADDED))
-                        database.insertItems(entry.getKey());
+                        database.insertItem(entry.getKey());
                     else if (entry.getValue().equals(DataState.UPDATED))
-                        database.updateItems(entry.getKey());
+                        database.updateItem(entry.getKey());
                     else if (entry.getValue().equals(DataState.REMOVED_CACHED))
                         database.deleteItem(entry.getKey());
                 });

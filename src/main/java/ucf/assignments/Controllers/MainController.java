@@ -1,3 +1,8 @@
+/*
+ *  UCF COP3330 Summer 2021 Assignment 5 Solution
+ *  Copyright 2021 Mikhail Plekunov
+ */
+
 package ucf.assignments.Controllers;
 
 import com.jfoenix.controls.*;
@@ -75,22 +80,17 @@ public class MainController {
 
     private final SceneManager sceneManager;
     private final ItemModel itemModel;
-    private final Collection<JFXTreeTableColumn<ucf.assignments.Models.Item, ?>> columns = new ArrayList<>();
+    private final Collection<JFXTreeTableColumn<Item, ?>> columns = new ArrayList<>();
 
     private enum ExpandState {EXPANDED, HIDDEN, CHANGING}
 
     private ExpandState expandState = ExpandState.HIDDEN;
-
 
     public MainController(ItemModel itemModel, SceneManager sceneManager) {
         this.itemModel = itemModel;
         this.sceneManager = sceneManager;
     }
 
-    //Fix UI interface
-
-    //Add TestCases
-    //Add Class Diagram
     public void initialize() {
         dayOfTheWeekBtn.widthProperty().addListener((observable, oldValue, newValue) -> changeContentPropertyOnAnimation(dayOfTheWeekBtn));
         dashboardBtn.widthProperty().addListener((observable, oldValue, newValue) -> changeContentPropertyOnAnimation(dashboardBtn));

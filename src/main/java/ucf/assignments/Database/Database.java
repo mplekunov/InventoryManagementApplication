@@ -1,3 +1,8 @@
+/*
+ *  UCF COP3330 Summer 2021 Assignment 5 Solution
+ *  Copyright 2021 Mikhail Plekunov
+ */
+
 package ucf.assignments.Database;
 
 import ucf.assignments.Converters.DateConverter;
@@ -46,7 +51,7 @@ public class Database {
         return items;
     }
 
-    public void updateItems(Item item) {
+    public void updateItem(Item item) {
         Connection connection = null;
 
         try {
@@ -73,7 +78,7 @@ public class Database {
         }
     }
 
-    public void insertItems(Item item) {
+    public void insertItem(Item item) {
         Connection connection = null;
 
         try {

@@ -1,0 +1,226 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+package JavaFx {
+    class InventoryManagementApp
+}
+
+class SceneManager {
+    -HashMap<String, Scene> scenes;
+
+    -load():void
+    +getScene(String):Scene
+}
+
+class InventoryManagementApp {
+    +start(Stage):void
+    +main():void
+}
+
+class AddItemController {
+    -ItemModel itemModel;
+    -Item item;
+    -double xOffset;
+    -double yOffset;
+
+    +AddItemController(ItemModel)
+    +initialize():void
+    -movePositionCaretOnClick(JFXTextField):void
+    -setOnClickDateTextField(MouseEvent, Item):void
+    -setOnClickPriceTextField(MouseEvent):void
+    -setPriceTextField(Item):void
+    -setSerialNumberTextField(Item):void
+    -setOnClickCancelBtn(MouseEvent):void
+    -setOnClickSaveBtn(MouseEvent, Item):void
+    -cleanFields():void
+    -setNameTextField(Item):void
+    -setFocusOnMainPainWhenMouseClicked(InputEvent):void
+}
+
+class MainController {
+    -SceneManager sceneManager;
+    -ItemModel itemModel;
+    -Collection<JFXTreeTableColumn<Item, ?>> columns;
+    -enum ExpandState;
+    -ExpandState expandState;
+
+    +MainController(ItemModel, SceneManager);
+    +initialize();
+    -changeContentPropertyOnAnimation(JFXButton):void
+    -addSlideAnimation():void
+    -addSearchTextFieldListener():void
+    -initItemTable(ObservableList<Item>):void
+    -initTreeTableColumn(String, int,String, Callback<TreeTableColumn<Item, T>, TreeTableCell<Item, T>>):JFXTreeTableColumn<Item, T>
+    -setOnActionRemoveItemBtn(ObservableList<Item>), TreeTableRow<Item>):void
+    -setOnActionAddItemBtn(ActionEvent):void
+    -exitProgram(ActionEvent):void
+    -exportFile(ActionEvent):void
+    importFile(ActionEvent):void
+}
+
+class JFXTextFieldStyle {
+    -JFXTextFieldStyle()
+
+    +setStyleOnError(JFXTextField, Side, String):void
+}
+
+class DateConverter {
+    -DateTimeFormatter dtf;
+    -DateConverter()
+
+    +toDate(String):LocalDate
+    +toString(LocalDate):String
+}
+
+class TSVConverter {
+    -FileManager fileManager;
+    -String header;
+
+    +TSVConverter(FileManager)
+    +toTSV(List<Item>):void
+    +fromTSV():(List<Item>)
+}
+
+class Database {
+    -String connectionString;
+    +Database()
+    +getItems():List<Item>
+    +updateItem(Item):void
+    +insertItem(Item):void
+    +deleteItem(Item):void
+}
+
+class FileManager {
+    -File file;
+
+    +FileManager(File)
+    +writeAll(String):void
+    +readAll():List<String>
+}
+
+class InputValidator {
+    -Pattern serialNumberPattern;
+    -Pattern pricePattern;
+    -InputValidator()
+
+    +validateSerialNumber(String, List<T extends Item>):ValidationState
+    +validatePrice(String):ValidationState
+}
+
+class Item {
+    -SimpleObjectProperty<LocalDate> date;
+    -SimpleDoubleProperty price;
+    -SimpleStringProperty serialNumber;
+    -SimpleStringProperty name;
+    -int id;
+
+    +Item()
+    +Item(String, String, Double, LocalDate)
+    +getPrice():SimpleDoubleProperty
+    +getName():SimpleStringProperty
+    +getDate():SimpleObjectProperty<LocalDate>
+    +getSerialNumber():SimpleStringProperty
+    +setName(String):void
+    +setPrice(Double):void
+    +setPrice(String):void
+    +setSerialNumber(String):void
+    +setDate(LocalDate):void
+    +setId(int):void
+}
+
+class ItemModel {
+    -HashMap<Item, DataState> itemCollection;
+    -ObservableList<Item> itemObservable;
+    -Database database;
+
+    +ItemModel()
+    +getAllItems():ObservableList<Items>
+    -addListChangeListener(ListChangeListener.Change<? extends Item>):void
+    -download():void
+    -upload():void
+    -resetBuffer():void
+}
+
+class DateFactory {
+    -JFXDatePicker datePicker;
+
+    +DateFactory()
+    +startEdit():void
+    +cancelEdit():void
+    #updateItem(LocalDate, boolean):void
+    -getDate():LocalDate
+    -createDatePicker():void
+}
+
+class NameFactory {
+    -JFXTextField textField;
+
+    +NameFactory()
+    +startEdit():void
+    +cancelEdit():void
+    #updateItem(String, boolean):void
+    +commitEdit(String):void
+    -getName():String
+    -createTextField():void
+}
+
+class PriceFactory {
+    -JFXTextField textField;
+
+    +PriceFactory()
+    +startEdit():void
+    +cancelEdit():void
+    #updateItem(String, boolean):void
+    +commitEdit(String):void
+    -getPrice():String
+    -createTextField():void
+}
+
+class SerialNumberFactory {
+    -JFXTextField textField;
+    -ObservableList<Item> items;
+    -String currentValue;
+
+    +SerialNumberFactory(ObservableList<Item>)
+    +startEdit():void
+    +cancelEdit():void
+    #updateItem(String, boolean)
+    +commitEdit(String):void
+    -getSerialNumber():String
+    -createTextField():void
+}
+
+InventoryManagementApp *-- SceneManager
+
+SceneManager *-- AddItemController
+SceneManager *--- MainController
+SceneManager *--- ItemModel
+
+MainController -- TSVConverter
+MainController *-- DateFactory
+MainController *-- NameFactory
+MainController *-- PriceFactory
+MainController *-- SerialNumberFactory
+MainController -- DateConverter
+
+AddItemController *-- Item
+AddItemController -- InputValidator
+AddItemController -- JFXTextFieldStyle
+
+ItemModel *-- Item
+ItemModel *-- Database
+ItemModel *-- DataState
+TSVConverter *-- FileManager
+
+NameFactory --- JFXTextFieldStyle
+
+PriceFactory -- InputValidator
+PriceFactory --- JFXTextFieldStyle
+
+SerialNumberFactory -- InputValidator
+SerialNumberFactory --- JFXTextFieldStyle
+
+DateFactory -- DateConverter
+
+
+@enduml

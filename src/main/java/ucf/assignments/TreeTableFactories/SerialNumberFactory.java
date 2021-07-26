@@ -1,3 +1,8 @@
+/*
+ *  UCF COP3330 Summer 2021 Assignment 5 Solution
+ *  Copyright 2021 Mikhail Plekunov
+ */
+
 package ucf.assignments.TreeTableFactories;
 
 import com.jfoenix.controls.JFXTextField;
@@ -14,12 +19,10 @@ import java.util.regex.Pattern;
 
 public class SerialNumberFactory extends JFXTreeTableCell<Item, String> {
     private JFXTextField textField;
-    private final Pattern pattern;
     private final ObservableList<Item> items;
     private String currentValue;
 
     public SerialNumberFactory(ObservableList<Item> itemObservable) {
-        pattern = Pattern.compile("^(?=([A-Z0-9]{10})(?!\\w))");
         items = itemObservable;
     }
 
