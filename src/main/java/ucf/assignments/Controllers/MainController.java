@@ -76,7 +76,9 @@ public class MainController {
     private final SceneManager sceneManager;
     private final ItemModel itemModel;
     private final Collection<JFXTreeTableColumn<ucf.assignments.Models.Item, ?>> columns = new ArrayList<>();
-    private enum ExpandState { EXPANDED, HIDDEN, CHANGING }
+
+    private enum ExpandState {EXPANDED, HIDDEN, CHANGING}
+
     private ExpandState expandState = ExpandState.HIDDEN;
 
 
@@ -199,19 +201,24 @@ public class MainController {
             final TreeTableRow<Item> row = new JFXTreeTableRow<>();
             final ContextMenu rowMenu = new ContextMenu();
 
+            rowMenu.setId("rowMenu");
+
             rowMenu.setOnShown(event -> rowMenu.show(row, Side.RIGHT, -row.getWidth(), row.getHeight()));
 
-            MenuItem editItem = new MenuItem("Edit");
             MenuItem removeItem = new MenuItem("Delete");
 
             removeItem.setOnAction(actionEvent -> setOnActionRemoveItemBtn(itemObservableList, row));
 
-            rowMenu.getItems().add(editItem);
             rowMenu.getItems().add(removeItem);
+
+            row.setOnMouseEntered(event -> itemTable.getSelectionModel().select(row.getIndex()));
+            row.setOnMouseExited(event -> {
+                itemTable.getSelectionModel().clearSelection();
+            });
 
             row.contextMenuProperty().bind(Bindings.when(Bindings.isNotNull(row.itemProperty()))
                     .then(rowMenu)
-                    .otherwise((ContextMenu)null));
+                    .otherwise((ContextMenu) null));
 
             return row;
         });
@@ -300,7 +307,6 @@ public class MainController {
                 errorAlert.showAndWait();
             }
         }
-
     }
 
     private void importFile(ActionEvent actionEvent) {

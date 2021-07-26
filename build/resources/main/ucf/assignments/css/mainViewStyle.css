@@ -75,8 +75,8 @@
     -fx-border-style: hidden hidden solid hidden;
 }
 
-.context-menu {
-    -fx-background-color: green;
+#rowMenu .context-menu {
+    -fx-background-color: rgb(121, 124, 141);
     -fx-background-radius: 0 8 8 8;
     -fx-border-radius: 0 8 8 8;
     -fx-effect: none;
@@ -87,11 +87,11 @@
     -fx-background-color: transparent;
 }
 
-/*.menu-item:hover {*/
-/*    -fx-background-color: red;*/
-/*    -fx-border-radius: 8;*/
-/*    -fx-background-radius: 8;*/
-/*}*/
+#rowMenu .menu-item:hover {
+    -fx-background-color: rgb(141, 144, 161);
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+}
 
 #leftPane .jfx-button, #leftPane .jfx-button .jfx-rippler {
     -fx-text-fill: rgb(45, 35, 76);
