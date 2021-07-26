@@ -2,6 +2,8 @@ package ucf.assignments.TreeTableFactories;
 
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.cells.editors.base.JFXTreeTableCell;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import ucf.assignments.Models.Item;
 
 import java.time.LocalDate;
@@ -71,7 +73,7 @@ public class DateFactory extends JFXTreeTableCell<Item, LocalDate> {
     private void createDatePicker() {
         datePicker = new JFXDatePicker(getDate());
         datePicker.setMinWidth(this.getWidth());
-
+        datePicker.setDefaultColor(Color.rgb(35, 25, 66));
         datePicker.setOnAction(e -> commitEdit(datePicker.getValue()));
 
         datePicker.focusedProperty().addListener((observable, oldValue, newValue) -> {

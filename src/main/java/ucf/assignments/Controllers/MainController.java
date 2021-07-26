@@ -2,6 +2,7 @@ package ucf.assignments.Controllers;
 
 import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+import com.sun.prism.paint.Paint;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -70,7 +71,7 @@ public class MainController {
     private JFXButton inventoryBtn;
 
     @FXML
-    private Label dayOfTheWeekLabel;
+    private JFXButton dayOfTheWeekBtn;
 
     private final SceneManager sceneManager;
     private final ItemModel itemModel;
@@ -89,13 +90,7 @@ public class MainController {
     //Add TestCases
     //Add Class Diagram
     public void initialize() {
-        dayOfTheWeekLabel.widthProperty().addListener((observable, oldValue, newValue) -> {
-            if (expandState == ExpandState.EXPANDED) {
-                dayOfTheWeekLabel.setContentDisplay(ContentDisplay.LEFT);
-            }else if (expandState == ExpandState.HIDDEN)
-                dayOfTheWeekLabel.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-        });
-
+        dayOfTheWeekBtn.widthProperty().addListener((observable, oldValue, newValue) -> changeContentPropertyOnAnimation(dayOfTheWeekBtn));
         dashboardBtn.widthProperty().addListener((observable, oldValue, newValue) -> changeContentPropertyOnAnimation(dashboardBtn));
         inventoryBtn.widthProperty().addListener((observable, oldValue, newValue) -> changeContentPropertyOnAnimation(inventoryBtn));
         exitBtn.widthProperty().addListener((observable, oldValue, newValue) -> changeContentPropertyOnAnimation(exitBtn));
@@ -142,15 +137,14 @@ public class MainController {
             leftPane.setTranslateX(0);
 
             if (newValue.doubleValue() > oldValue.doubleValue())
-                leftPane.setMinWidth(leftPane.getWidth() + 10);
+                leftPane.setMinWidth(leftPane.getWidth() + 14);
             else
-                leftPane.setMinWidth(leftPane.getWidth() - 10);
+                leftPane.setMinWidth(leftPane.getWidth() - 14);
         });
-
 
         leftPane.setOnMouseEntered(event -> {
             if (expandState == ExpandState.HIDDEN) {
-                TranslateTransition transition = new TranslateTransition(Duration.seconds(0.3), leftPane);
+                TranslateTransition transition = new TranslateTransition(Duration.seconds(0.2), leftPane);
                 transition.setByX(100);
 
                 expandState = ExpandState.CHANGING;
@@ -164,12 +158,12 @@ public class MainController {
 
         leftPane.setOnMouseExited(event -> {
             if (expandState == ExpandState.EXPANDED) {
-                TranslateTransition transition = new TranslateTransition(Duration.seconds(0.3), leftPane);
+                TranslateTransition transition = new TranslateTransition(Duration.seconds(0.2), leftPane);
                 transition.setByX(-100);
 
                 expandState = ExpandState.CHANGING;
                 transition.setOnFinished(finishedEvent -> {
-                    leftPane.setMinWidth(60);
+                    leftPane.setMinWidth(50);
                     expandState = ExpandState.HIDDEN;
                 });
 
@@ -221,32 +215,6 @@ public class MainController {
 
             return row;
         });
-    }
-
-    private void slideMenuPane() {
-//        leftPane.setOnMouseEntered(event -> {
-//            if (expandState == ExpandState.HIDDEN) {
-//                TranslateTransition transition = new TranslateTransition(Duration.seconds(0.5), leftPane);
-//                transition.setByX(100);
-//
-//                expandState = ExpandState.CHANGING;
-//                transition.setOnFinished(finishedEvent -> expandState = ExpandState.EXPANDED);
-//
-//                transition.play();
-//            }
-//        });
-//
-//        leftPane.setOnMouseExited(event -> {
-//            if (expandState == ExpandState.EXPANDED) {
-//                TranslateTransition transition = new TranslateTransition(Duration.seconds(0.5), leftPane);
-//                transition.setByX(-50);
-//
-//                expandState = ExpandState.CHANGING;
-//                transition.setOnFinished(finishedEvent -> expandState = ExpandState.HIDDEN);
-//
-//                transition.play();
-//            }
-//        });
     }
 
     private <T> JFXTreeTableColumn<Item, T> initTreeTableColumn(String name, int width, String style, Callback<TreeTableColumn<Item, T>, TreeTableCell<Item, T>> factory) {

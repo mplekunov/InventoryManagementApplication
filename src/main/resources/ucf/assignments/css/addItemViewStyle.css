@@ -5,8 +5,21 @@
     -fx-background-radius: 10;
 }
 
-.jfx-button {
+#cancelBtn, #saveBtn {
     -jfx-button-type: RAISED;
     -fx-background-color: rgb(141, 114, 151);
     -fx-text-fill: black;
+}
+
+.jfx-text-field > .input-focused-line {
+    -fx-background-color: rgb(75, 65, 106);
+}
+
+.context-menu {
+    -fx-effect: none;
+    -fx-min-width: 100;
+}
+
+.menu-item {
+    -fx-background-color: transparent;
 }

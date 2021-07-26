@@ -3,6 +3,10 @@ package ucf.assignments.TreeTableFactories;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.cells.editors.base.JFXTreeTableCell;
 import javafx.collections.ObservableList;
+import javafx.geometry.Side;
+import ucf.assignments.ControllerStyle.JFXTextFieldStyle;
+import ucf.assignments.InputValidation.InputValidator;
+import ucf.assignments.InputValidation.ValidationState;
 import ucf.assignments.Models.Item;
 
 import java.util.regex.Matcher;
@@ -65,17 +69,20 @@ public class SerialNumberFactory extends JFXTreeTableCell<Item, String> {
 
     @Override
     public void commitEdit(String newValue) {
-        Matcher matcher = pattern.matcher(newValue);
+        ValidationState state = InputValidator.validateSerialNumber(newValue, items);
 
         long duplicates = 0;
         if (!currentValue.equals(newValue))
             duplicates = items.stream().filter(item -> item.getSerialNumber().getValue().equals(newValue)).count();
 
-        if (matcher.find() && duplicates == 0)
+        if (state.equals(ValidationState.PASSED) && duplicates == 0)
             super.commitEdit(newValue);
         else {
             textField.requestFocus();
-            System.out.println("Wrong Format");
+            if (duplicates > 0)
+                JFXTextFieldStyle.setStyleOnError(textField, Side.TOP, "Serial Number already exists!");
+            else if (state.equals(ValidationState.INCORRECT_FORMAT))
+                JFXTextFieldStyle.setStyleOnError(textField, Side.TOP, "Serial Number has incorrect format!");
         }
     }
 

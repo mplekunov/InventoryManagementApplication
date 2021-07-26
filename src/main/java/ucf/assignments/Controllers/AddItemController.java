@@ -5,15 +5,19 @@ import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
 
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.scene.input.InputEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import ucf.assignments.ControllerStyle.JFXTextFieldStyle;
 import ucf.assignments.Converters.DateConverter;
+import ucf.assignments.InputValidation.InputValidator;
+import ucf.assignments.InputValidation.ValidationState;
 import ucf.assignments.Models.Item;
 import ucf.assignments.Models.ItemModel;
 
@@ -46,8 +50,6 @@ public class AddItemController {
     private AnchorPane mainPane;
 
     private final ItemModel itemModel;
-    private final Pattern pattern;
-    private final Pattern pricePattern;
     private Item item;
 
     private double xOffset = 0;
@@ -55,8 +57,6 @@ public class AddItemController {
 
     public AddItemController(ItemModel itemModel) {
         this.itemModel = itemModel;
-        pattern = Pattern.compile("^(?:([A-Z0-9]{10})(?!\\w))");
-        pricePattern = Pattern.compile("^(?=.)(([0-9]*)(\\.([0-9]{1,2}))?)$");
         item = new Item();
     }
 
@@ -73,18 +73,19 @@ public class AddItemController {
 
         mainPane.setOnMouseClicked(this::setFocusOnMainPaneWhenMouseClicked);
 
+        nameTextField.setOnMouseClicked(e -> movePositionCaretOnClick(nameTextField));
         nameTextField.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue)
                 setNameTextField(item);
         });
 
+        serialNumberTextField.setOnMouseClicked(e -> movePositionCaretOnClick(serialNumberTextField));
         serialNumberTextField.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue)
                 setSerialNumberTextField(item);
         });
 
         priceTextField.setOnMouseClicked(this::setOnClickPriceTextField);
-
         priceTextField.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue)
                 setPriceTextField(item);
@@ -97,6 +98,10 @@ public class AddItemController {
         cancelBtn.setOnMouseClicked(this::setOnClickCancelBtn);
     }
 
+    private void movePositionCaretOnClick(JFXTextField textField) {
+            textField.positionCaret(textField.getText().length());
+    }
+
     private void setOnClickDateTextField(MouseEvent event, Item item) {
         if (event.getEventType().equals(MouseEvent.MOUSE_CLICKED)) {
             if (dateTextField.isFocused()) {
@@ -104,6 +109,7 @@ public class AddItemController {
                 dateTextField.setManaged(false);
 
                 JFXDatePicker datePicker = new JFXDatePicker(DateConverter.toDate(dateTextField.getText()));
+                datePicker.setDefaultColor(Color.rgb(35, 25, 66));
 
                 datePicker.setPrefWidth(dateTextField.getWidth());
                 datePicker.setPrefHeight(dateTextField.getHeight());
@@ -137,38 +143,38 @@ public class AddItemController {
         if (event.getEventType().equals(MouseEvent.MOUSE_CLICKED)) {
             String formattedPrice = priceTextField.getText().replace("$", "").replaceAll(",", "");
             priceTextField.setText(formattedPrice);
-            priceTextField.positionCaret(formattedPrice.length());
+            movePositionCaretOnClick(priceTextField);
         }
     }
 
     private void setPriceTextField(Item item) {
-        boolean isMatched = pricePattern.matcher(priceTextField.getText()).find();
+        ValidationState state = InputValidator.validatePrice(priceTextField.getText());
 
-        if (!isMatched) {
-            priceTextField.requestFocus();
-            System.out.println("Price Incorrect Format");
-        } else {
-            item.setPrice(priceTextField.getText());
-            priceTextField.setText(NumberFormat.getCurrencyInstance().format(Double.parseDouble(priceTextField.getText())));
+        if (!priceTextField.getText().isEmpty()) {
+            if (state.equals(ValidationState.INCORRECT_FORMAT)) {
+                priceTextField.requestFocus();
+                JFXTextFieldStyle.setStyleOnError(priceTextField, Side.TOP,"Price has incorrect format! Format Ex. (12.23, 12, 12.0)");
+            } else if (state.equals(ValidationState.PASSED)){
+                item.setPrice(priceTextField.getText());
+                priceTextField.setText(NumberFormat.getCurrencyInstance().format(Double.parseDouble(priceTextField.getText())));
+            }
         }
     }
 
     private void setSerialNumberTextField(Item item) {
-        boolean isMatched = pattern.matcher(serialNumberTextField.getText()).find();
-        boolean isFound = itemModel.getAllItems().stream().anyMatch(obj -> obj.getSerialNumber().getValue().equals(serialNumberTextField.getText()));
-        boolean isEmpty = serialNumberTextField.getText().isEmpty();
+       ValidationState state = InputValidator.validateSerialNumber(serialNumberTextField.getText(), itemModel.getAllItems());
 
-        if (isEmpty || isFound || !isMatched) {
-            if (isEmpty)
-                System.out.println("Field is Empty");
-            else if (isFound)
-                System.out.println("Already Exists");
-            else
-                System.out.println("Incorrect Format");
+        if (!serialNumberTextField.getText().isEmpty()) {
+            if (state.equals(ValidationState.INCORRECT_FORMAT) || state.equals(ValidationState.ALREADY_EXISTS)) {
+                if (state.equals(ValidationState.ALREADY_EXISTS))
+                    JFXTextFieldStyle.setStyleOnError(serialNumberTextField, Side.TOP,"Serial Number already exists!");
+                else
+                    JFXTextFieldStyle.setStyleOnError(serialNumberTextField, Side.TOP,"Serial Number has incorrect format!");
 
-            serialNumberTextField.requestFocus();
-        } else
-            item.setSerialNumber(serialNumberTextField.getText());
+                serialNumberTextField.requestFocus();
+            } else
+                item.setSerialNumber(serialNumberTextField.getText());
+        }
     }
 
     private void setOnClickCancelBtn(MouseEvent event) {
@@ -177,16 +183,27 @@ public class AddItemController {
     }
 
     private void setOnClickSaveBtn(MouseEvent event, Item item) {
-        if (nameTextField.getText().isEmpty() || serialNumberTextField.getText().isEmpty() || priceTextField.getText().isEmpty()) {
+        ValidationState priceState = InputValidator.validatePrice(priceTextField.getText().replace("$", "").replaceAll(",", ""));
+        ValidationState serialNumberState = InputValidator.validateSerialNumber(serialNumberTextField.getText(), itemModel.getAllItems());
+
+        if (nameTextField.getText().isEmpty() || serialNumberTextField.getText().isEmpty() || priceTextField.getText().isEmpty()
+                || !priceState.equals(ValidationState.PASSED) || !serialNumberState.equals(ValidationState.PASSED)) {
             if (nameTextField.getText().isEmpty())
-                System.out.println("Name Field is Empty");
+                JFXTextFieldStyle.setStyleOnError(nameTextField, Side.RIGHT,"Name is empty!");
 
             if (serialNumberTextField.getText().isEmpty())
-                System.out.println("Serial Number Field is Empty");
+                JFXTextFieldStyle.setStyleOnError(serialNumberTextField, Side.RIGHT,"Serial Number is empty!");
 
             if (priceTextField.getText().isEmpty())
-                System.out.println("Price Field is Empty");
+                JFXTextFieldStyle.setStyleOnError(priceTextField, Side.RIGHT,"Price is empty!");
 
+            if (priceState.equals(ValidationState.INCORRECT_FORMAT))
+                JFXTextFieldStyle.setStyleOnError(priceTextField, Side.RIGHT,"Price has incorrect format! Format Ex. (12.23, 12, 12.0)");
+
+            if (serialNumberState.equals(ValidationState.INCORRECT_FORMAT))
+                JFXTextFieldStyle.setStyleOnError(serialNumberTextField, Side.RIGHT, "Serial Number has incorrect format!");
+            else if (serialNumberState.equals(ValidationState.ALREADY_EXISTS))
+                JFXTextFieldStyle.setStyleOnError(serialNumberTextField, Side.RIGHT, "Serial Number already exists!");
         } else {
             itemModel.getAllItems().add(item);
             setOnClickCancelBtn(event);
@@ -202,10 +219,7 @@ public class AddItemController {
     }
 
     private void setNameTextField(Item item) {
-        if (nameTextField.getText().isEmpty()) {
-            System.out.println("Error, empty string");
-            nameTextField.requestFocus();
-        } else
+        if (!nameTextField.getText().isEmpty())
             item.setName(nameTextField.getText());
     }
 

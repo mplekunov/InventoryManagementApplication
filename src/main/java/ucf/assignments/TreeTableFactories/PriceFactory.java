@@ -2,6 +2,10 @@ package ucf.assignments.TreeTableFactories;
 
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.cells.editors.base.JFXTreeTableCell;
+import javafx.geometry.Side;
+import ucf.assignments.ControllerStyle.JFXTextFieldStyle;
+import ucf.assignments.InputValidation.InputValidator;
+import ucf.assignments.InputValidation.ValidationState;
 import ucf.assignments.Models.Item;
 
 import java.text.NumberFormat;
@@ -52,6 +56,18 @@ public class PriceFactory extends JFXTreeTableCell<Item, String> {
                 setGraphic(null);
             }
         }
+    }
+
+    @Override
+    public void commitEdit(String newValue) {
+        ValidationState state = InputValidator.validatePrice(newValue);
+
+        if (state.equals(ValidationState.INCORRECT_FORMAT)) {
+            JFXTextFieldStyle.setStyleOnError(textField, Side.TOP, "Price has incorrect format! Format Ex. (12.23, 12, 12.0)");
+            textField.requestFocus();
+        }
+        else
+            super.commitEdit(newValue);
     }
 
     private String getPrice() {

@@ -9,9 +9,9 @@
 }
 
 #datePane {
-    -fx-border-width: 2;
-    -fx-border-style: hidden hidden solid hidden;
-    -fx-border-color: rgb(41, 44, 61);
+    /*-fx-border-width: 2;*/
+    /*-fx-border-style: hidden hidden solid hidden;*/
+    /*-fx-border-color: rgb(41, 44, 61);*/
 }
 
 #directoryPane .jfx-button {
@@ -25,22 +25,14 @@
 }
 
 #dashboardPane, #inventoryPane, #exitPane {
-    -fx-border-color: black;
-    -fx-border-width: 0.5;
-    -fx-border-style: hidden;
-}
-
-.separator:horizontal > .line{
-    -fx-border-style: solid;
-    -fx-border-color: grey;
-    -fx-border-width: 0.3;
-    -fx-border-insets: 1;
+    /*-fx-border-color: black;*/
+    /*-fx-border-width: 0.5;*/
+    /*-fx-border-style: hidden;*/
 }
 
 #itemTable .tree-table-row-cell {
     -fx-background-color: rgb(235, 233, 237);
     -fx-border-color: transparent;
-    /*-fx-background-insets: 0, 0 0 1 0;*/
     -fx-padding: 0.0em;
     -fx-text-fill: black;
 }
@@ -95,14 +87,19 @@
     -fx-background-color: transparent;
 }
 
-.menu-item:hover {
-    -fx-background-color: red;
-    -fx-border-radius: 8;
-    -fx-background-radius: 8;
+/*.menu-item:hover {*/
+/*    -fx-background-color: red;*/
+/*    -fx-border-radius: 8;*/
+/*    -fx-background-radius: 8;*/
+/*}*/
+
+#leftPane .jfx-button, #leftPane .jfx-button .jfx-rippler {
+    -fx-text-fill: rgb(45, 35, 76);
+    -jfx-rippler-fill: rgb(41, 44, 61);
 }
 
-#leftPane .jfx-button, #leftPane .label {
-    -fx-text-fill: rgb(45, 35, 76);
+.jfx-text-field > .input-focused-line {
+    -fx-background-color: rgb(75, 65, 106);
 }
 
 #leftPane {

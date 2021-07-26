@@ -39,23 +39,29 @@
         </AnchorPane>
     </top>
     <left>
-        <AnchorPane id="leftPane" fx:id="leftPane" prefWidth="40.0" BorderPane.alignment="CENTER">
+        <AnchorPane id="leftPane" fx:id="leftPane" minWidth="50.0" BorderPane.alignment="CENTER">
             <children>
                 <VBox AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
                       AnchorPane.topAnchor="0.0">
                     <children>
-                        <AnchorPane id="datePane" prefHeight="32.0">
+                        <AnchorPane id="datePane">
                             <children>
-                                <Label fx:id="dayOfTheWeekLabel" alignment="CENTER" text="Tuesday"
-                                       AnchorPane.bottomAnchor="4.0" AnchorPane.leftAnchor="36.0"
-                                       AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="4.0"/>
-                                <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true"
-                                           AnchorPane.bottomAnchor="4.0" AnchorPane.leftAnchor="12.0"
-                                           AnchorPane.topAnchor="4.0">
-                                    <image>
-                                        <Image url="@../icons/calendar/20.png"/>
-                                    </image>
-                                </ImageView>
+                                <JFXButton id="dayOfTheWeekBtn" fx:id="dayOfTheWeekBtn" focusTraversable="false" alignment="BASELINE_LEFT"
+                                           graphicTextGap="24.0" prefHeight="32.0" text="Monday"
+                                           AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                                           AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" buttonType="FLAT" disable="true">
+                                    <graphic>
+                                        <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true"
+                                                   preserveRatio="true">
+                                            <image>
+                                                <Image url="@../icons/calendar/20.png"/>
+                                            </image>
+                                        </ImageView>
+                                    </graphic>
+                                    <padding>
+                                        <Insets left="12.0"/>
+                                    </padding>
+                                </JFXButton>
                             </children>
                         </AnchorPane>
                         <AnchorPane id="dashboardPane">
@@ -63,9 +69,9 @@
                                 <JFXButton fx:id="dashboardBtn" focusTraversable="false" alignment="BASELINE_LEFT"
                                            graphicTextGap="24.0" prefHeight="32.0" text="DASHBOARD"
                                            AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
-                                           AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                           AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" buttonType="FLAT">
                                     <graphic>
-                                        <ImageView fitHeight="150.0" fitWidth="24.0" pickOnBounds="true"
+                                        <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true"
                                                    preserveRatio="true">
                                             <image>
                                                 <Image url="@../icons/dashboard.png"/>
@@ -78,8 +84,7 @@
                                 </JFXButton>
                             </children>
                         </AnchorPane>
-                        <Separator/>
-                        <AnchorPane id="inventoryPane" layoutX="10.0" layoutY="60.0">
+                        <AnchorPane id="inventoryPane">
                             <children>
                                 <JFXButton fx:id="inventoryBtn" focusTraversable="false" alignment="BASELINE_LEFT"
                                            graphicTextGap="24.0" prefHeight="32.0" text="INVENTORY"
@@ -89,7 +94,7 @@
                                         <Insets left="12.0"/>
                                     </padding>
                                     <graphic>
-                                        <ImageView fitHeight="150.0" fitWidth="24.0" pickOnBounds="true"
+                                        <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true"
                                                    preserveRatio="true">
                                             <image>
                                                 <Image url="@../icons/inventory.png"/>
@@ -99,8 +104,7 @@
                                 </JFXButton>
                             </children>
                         </AnchorPane>
-                        <Separator layoutX="10.0" layoutY="44.0"/>
-                        <AnchorPane id="exitPane" layoutX="10.0" layoutY="44.0">
+                        <AnchorPane id="exitPane" >
                             <children>
                                 <JFXButton fx:id="exitBtn" focusTraversable="false" alignment="BASELINE_LEFT"
                                            graphicTextGap="24.0" prefHeight="32.0" text="EXIT"
@@ -120,7 +124,6 @@
                                 </JFXButton>
                             </children>
                         </AnchorPane>
-                        <Separator layoutX="10.0" layoutY="82.0"/>
                     </children>
                 </VBox>
             </children>

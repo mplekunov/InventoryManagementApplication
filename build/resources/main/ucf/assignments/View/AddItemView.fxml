@@ -10,7 +10,7 @@
 <?import com.jfoenix.controls.JFXButton?>
 
 <AnchorPane id="mainPane" fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-            minWidth="-Infinity" prefHeight="300.0"
+            minWidth="-Infinity" prefHeight="260.0"
             prefWidth="370.0" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1"
             stylesheets="@../css/addItemViewStyle.css"
             fx:controller="ucf.assignments.Controllers.AddItemController">
@@ -103,8 +103,8 @@
         </VBox>
         <HBox spacing="12.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0">
             <children>
-                <JFXButton fx:id="saveBtn" focusTraversable="false" text="Save" buttonType="RAISED"/>
-                <JFXButton fx:id="cancelBtn" focusTraversable="false" text="Cancel" buttonType="RAISED"/>
+                <JFXButton id="saveBtn" fx:id="saveBtn" focusTraversable="false" text="Save" buttonType="RAISED"/>
+                <JFXButton id="cancelBtn" fx:id="cancelBtn" focusTraversable="false" text="Cancel" buttonType="RAISED"/>
             </children>
             <padding>
                 <Insets bottom="8.0" right="8.0"/>

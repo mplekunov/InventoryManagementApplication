@@ -3,7 +3,9 @@ package ucf.assignments.TreeTableFactories;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.cells.editors.base.JFXTreeTableCell;
 import javafx.event.Event;
+import javafx.geometry.Side;
 import javafx.scene.control.*;
+import ucf.assignments.ControllerStyle.JFXTextFieldStyle;
 import ucf.assignments.Models.Item;
 
 public class NameFactory extends JFXTreeTableCell<Item, String> {
@@ -60,7 +62,7 @@ public class NameFactory extends JFXTreeTableCell<Item, String> {
             super.commitEdit(newValue);
         else {
             textField.requestFocus();
-            System.out.println("Empty");
+            JFXTextFieldStyle.setStyleOnError(textField, Side.TOP,"Name is empty!");
         }
     }
 

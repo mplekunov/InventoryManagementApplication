@@ -1,9 +1,9 @@
-ucf/assignments/TreeTableFactories/DateFactory.java
- ucf.assignments.TreeTableFactories.DateFactory
+ucf/assignments/InventoryManagementApp.java
+ ucf.assignments.InventoryManagementApp
 ucf/assignments/Converters/TSVConverter.java
  ucf.assignments.Converters.TSVConverter
-ucf/assignments/TreeTableFactories/SerialNumberFactory.java
- ucf.assignments.TreeTableFactories.SerialNumberFactory
+ucf/assignments/ControllerStyle/JFXTextFieldStyle.java
+ ucf.assignments.ControllerStyle.JFXTextFieldStyle
 ucf/assignments/Database/DataState.java
  ucf.assignments.Database.DataState
 ucf/assignments/Models/ItemModel.java
@@ -14,18 +14,24 @@ ucf/assignments/Converters/DateConverter.java
  ucf.assignments.Converters.DateConverter
 ucf/assignments/Database/Database.java
  ucf.assignments.Database.Database
-ucf/assignments/TreeTableFactories/NameFactory.java
- ucf.assignments.TreeTableFactories.NameFactory
-ucf/assignments/Controllers/AddItemController.java
- ucf.assignments.Controllers.AddItemController
+ucf/assignments/InputValidation/ValidationState.java
+ ucf.assignments.InputValidation.ValidationState
+ucf/assignments/TreeTableFactories/DateFactory.java
+ ucf.assignments.TreeTableFactories.DateFactory
 ucf/assignments/File/FileManager.java
  ucf.assignments.File.FileManager
-ucf/assignments/TreeTableFactories/PriceFactory.java
- ucf.assignments.TreeTableFactories.PriceFactory
-ucf/assignments/InventoryManagementApp.java
- ucf.assignments.InventoryManagementApp
-ucf/assignments/SceneManager.java
- ucf.assignments.SceneManager
+ucf/assignments/TreeTableFactories/NameFactory.java
+ ucf.assignments.TreeTableFactories.NameFactory
 ucf/assignments/Controllers/MainController.java
  ucf.assignments.Controllers.MainController
  ucf.assignments.Controllers.MainController$ExpandState
+ucf/assignments/InputValidation/InputValidator.java
+ ucf.assignments.InputValidation.InputValidator
+ucf/assignments/TreeTableFactories/SerialNumberFactory.java
+ ucf.assignments.TreeTableFactories.SerialNumberFactory
+ucf/assignments/TreeTableFactories/PriceFactory.java
+ ucf.assignments.TreeTableFactories.PriceFactory
+ucf/assignments/SceneManager.java
+ ucf.assignments.SceneManager
+ucf/assignments/Controllers/AddItemController.java
+ ucf.assignments.Controllers.AddItemController
