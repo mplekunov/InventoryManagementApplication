@@ -257,7 +257,7 @@ public class MainController {
     }
 
     private void exitProgram(ActionEvent actionEvent) {
-        itemModel.upload();
+//        itemModel.upload();
 
         Platform.exit();
         System.exit(0);
@@ -325,8 +325,8 @@ public class MainController {
 
         if (selectedFile != null) {
             Thread importingThread = new Thread(() -> {
-                TSVConverter tsvConverter = new TSVConverter(new FileManager(selectedFile));
                 itemModel.resetBuffer();
+                TSVConverter tsvConverter = new TSVConverter(new FileManager(selectedFile));
                 itemModel.getAllItems().addAll(tsvConverter.fromTSV());
             });
             importingThread.start();

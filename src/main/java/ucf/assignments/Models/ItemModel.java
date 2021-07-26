@@ -30,7 +30,7 @@ public class ItemModel {
                         item.getDate()
                 });
 
-        download();
+//        download();
 
         itemObservable.addListener(this::addListChangeListener);
     }
@@ -90,8 +90,9 @@ public class ItemModel {
 
     public void resetBuffer() {
         itemObservable.clear();
+//        itemCollection.clear();
         itemCollection.entrySet().forEach(entry -> entry.setValue(DataState.REMOVED_CACHED));
-        upload();
+//        upload();
     }
 
     public void upload() {
