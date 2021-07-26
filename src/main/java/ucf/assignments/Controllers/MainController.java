@@ -10,11 +10,14 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Side;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Callback;
 
 import ucf.assignments.Converters.TSVConverter;
@@ -28,7 +31,6 @@ import java.io.File;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class MainController {
@@ -56,14 +58,12 @@ public class MainController {
 
     private final SceneManager sceneManager;
     private final ItemModel itemModel;
-    private final EditItemController editItemController;
     private final Collection<JFXTreeTableColumn<ucf.assignments.Models.Item, ?>> columns = new ArrayList<>();
 
 
-    public MainController(ItemModel itemModel, EditItemController editItemController, SceneManager sceneManager) {
+    public MainController(ItemModel itemModel, SceneManager sceneManager) {
         this.itemModel = itemModel;
         this.sceneManager = sceneManager;
-        this.editItemController = editItemController;
     }
 
     //Fix UI interface
@@ -119,6 +119,8 @@ public class MainController {
         itemTable.setShowRoot(false);
         itemTable.setEditable(true);
         itemTable.getColumns().setAll(columns);
+        itemTable.setColumnResizePolicy(TreeTableView.CONSTRAINED_RESIZE_POLICY);
+        itemTable.setStyle("-fx-background-color: transparentF");
 
         itemTable.setRowFactory(param -> {
             final TreeTableRow<Item> row = new JFXTreeTableRow<>();
@@ -128,8 +130,6 @@ public class MainController {
 
             MenuItem editItem = new MenuItem("Edit");
             MenuItem removeItem = new MenuItem("Delete");
-
-            editItem.setOnAction(actionEvent -> setOnActionEditItemBtn(actionEvent, row));
 
             removeItem.setOnAction(actionEvent -> setOnActionRemoveItemBtn(itemObservableList, row));
 
@@ -163,22 +163,16 @@ public class MainController {
         itemTable.getSelectionModel().clearSelection();
     }
 
-    private void setOnActionEditItemBtn(ActionEvent actionEvent, TreeTableRow<Item> row) {
-        Stage window = new Stage();
-        window.initModality(Modality.APPLICATION_MODAL);
-        window.setTitle("Edit");
-
-        window.setScene(sceneManager.getScene("EditItemView"));
-        editItemController.initialize(row.getItem());
-        window.showAndWait();
-    }
-
     private void setOnActionAddItemBtn(ActionEvent event) {
         Stage window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);
         window.setTitle("Add Item");
 
-        window.setScene(sceneManager.getScene("AddItemView"));
+        Scene addItemViewScene = sceneManager.getScene("AddItemView");
+        addItemViewScene.setFill(Color.TRANSPARENT);
+
+        window.initStyle(StageStyle.TRANSPARENT);
+        window.setScene(addItemViewScene);
         window.showAndWait();
     }
 
@@ -252,20 +246,9 @@ public class MainController {
 
         if (selectedFile != null) {
             Thread importingThread = new Thread(() -> {
-//                Thread uploadingThread = new Thread(itemModel::upload);
-//                uploadingThread.start();
-//
-//                try {
-//                    uploadingThread.join();
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-
                 TSVConverter tsvConverter = new TSVConverter(new FileManager(selectedFile));
                 itemModel.resetBuffer();
-//                itemModel.getAllItems().removeAll(itemModel.getAllItems());
                 itemModel.getAllItems().addAll(tsvConverter.fromTSV());
-//                tsvConverter.fromTSV().forEach(item -> itemModel.getAllItems().add(item));
             });
             importingThread.start();
         }

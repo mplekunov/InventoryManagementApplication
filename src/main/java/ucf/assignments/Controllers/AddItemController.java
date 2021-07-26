@@ -5,6 +5,7 @@ import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
 
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.input.InputEvent;
@@ -49,6 +50,9 @@ public class AddItemController {
     private final Pattern pricePattern;
     private Item item;
 
+    private double xOffset = 0;
+    private double yOffset = 0;
+
     public AddItemController(ItemModel itemModel) {
         this.itemModel = itemModel;
         pattern = Pattern.compile("^(?:([A-Z0-9]{10})(?!\\w))");
@@ -57,6 +61,16 @@ public class AddItemController {
     }
 
     public void initialize() {
+        mainPane.setOnMousePressed(event -> {
+            xOffset = event.getSceneX();
+            yOffset = event.getSceneY();
+        });
+
+        mainPane.setOnMouseDragged(event -> {
+            mainPane.getScene().getWindow().setX(event.getScreenX() - xOffset);
+            mainPane.getScene().getWindow().setY(event.getScreenY() - yOffset);
+        });
+
         mainPane.setOnMouseClicked(this::setFocusOnMainPaneWhenMouseClicked);
 
         nameTextField.focusedProperty().addListener((observable, oldValue, newValue) -> {

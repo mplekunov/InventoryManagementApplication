@@ -9,14 +9,16 @@
 <?import com.jfoenix.controls.JFXTextField?>
 <?import com.jfoenix.controls.JFXButton?>
 
-<AnchorPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0"
+<AnchorPane id="mainPane" fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+            minWidth="-Infinity" prefHeight="300.0"
             prefWidth="370.0" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1"
+            stylesheets="@../css/addItemViewStyle.css"
             fx:controller="ucf.assignments.Controllers.AddItemController">
     <children>
         <VBox layoutX="227.0" layoutY="137.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.leftAnchor="0.0"
               AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="20.0">
             <children>
-                <HBox prefHeight="40.0" spacing="20.0">
+                <HBox prefHeight="45.0" spacing="20.0">
                     <children>
                         <AnchorPane prefWidth="120.0">
                             <children>
@@ -29,13 +31,14 @@
                         </AnchorPane>
                         <AnchorPane>
                             <children>
-                                <JFXTextField fx:id="nameTextField" focusTraversable="false" prefWidth="180.0" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="0.0"
-                                           AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="8.0"/>
+                                <JFXTextField fx:id="nameTextField" focusTraversable="false" prefWidth="180.0"
+                                              AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="0.0"
+                                              AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="8.0"/>
                             </children>
                         </AnchorPane>
                     </children>
                 </HBox>
-                <HBox prefHeight="40.0" spacing="20.0">
+                <HBox prefHeight="45.0" spacing="20.0">
                     <children>
                         <AnchorPane prefWidth="120.0">
                             <children>
@@ -49,13 +52,14 @@
                         </AnchorPane>
                         <AnchorPane prefWidth="180.0">
                             <children>
-                                <JFXTextField fx:id="serialNumberTextField" focusTraversable="false"  AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="0.0"
-                                           AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="8.0"/>
+                                <JFXTextField fx:id="serialNumberTextField" focusTraversable="false"
+                                              AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="0.0"
+                                              AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="8.0"/>
                             </children>
                         </AnchorPane>
                     </children>
                 </HBox>
-                <HBox prefHeight="40.0" spacing="20.0">
+                <HBox prefHeight="45.0" spacing="20.0">
                     <children>
                         <AnchorPane prefWidth="120.0">
                             <children>
@@ -68,13 +72,14 @@
                         </AnchorPane>
                         <AnchorPane prefWidth="180.0">
                             <children>
-                                <JFXTextField fx:id="priceTextField" focusTraversable="false" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="0.0"
-                                           AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="8.0"/>
+                                <JFXTextField fx:id="priceTextField" focusTraversable="false"
+                                              AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="0.0"
+                                              AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="8.0"/>
                             </children>
                         </AnchorPane>
                     </children>
                 </HBox>
-                <HBox prefHeight="40.0" spacing="20.0">
+                <HBox prefHeight="45.0" spacing="20.0">
                     <children>
                         <AnchorPane prefWidth="120.0">
                             <children>
@@ -87,8 +92,9 @@
                         </AnchorPane>
                         <AnchorPane fx:id="datePane" prefWidth="180.0">
                             <children>
-                                <JFXTextField fx:id="dateTextField" focusTraversable="false" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="0.0"
-                                           AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="8.0"/>
+                                <JFXTextField fx:id="dateTextField" focusTraversable="false"
+                                              AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="0.0"
+                                              AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="8.0"/>
                             </children>
                         </AnchorPane>
                     </children>
