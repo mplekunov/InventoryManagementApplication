@@ -8,6 +8,12 @@
     -fx-text-fill: black;
 }
 
+#datePane {
+    -fx-border-width: 2;
+    -fx-border-style: hidden hidden solid hidden;
+    -fx-border-color: rgb(41, 44, 61);
+}
+
 #directoryPane .jfx-button {
     -jfx-button-type: FLAT;
     -fx-text-fill: rgb(141, 114, 151);

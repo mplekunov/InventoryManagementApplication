@@ -2,6 +2,7 @@ package ucf.assignments.Controllers;
 
 import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleStringProperty;
@@ -10,8 +11,10 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Side;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
@@ -20,6 +23,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
 
+import javafx.util.Duration;
 import ucf.assignments.Converters.TSVConverter;
 import ucf.assignments.File.FileManager;
 import ucf.assignments.Models.Item;
@@ -56,9 +60,23 @@ public class MainController {
     @FXML
     private BorderPane mainPane;
 
+    @FXML
+    private AnchorPane leftPane;
+
+    @FXML
+    private JFXButton dashboardBtn;
+
+    @FXML
+    private JFXButton inventoryBtn;
+
+    @FXML
+    private Label dayOfTheWeekLabel;
+
     private final SceneManager sceneManager;
     private final ItemModel itemModel;
     private final Collection<JFXTreeTableColumn<ucf.assignments.Models.Item, ?>> columns = new ArrayList<>();
+    private enum ExpandState { EXPANDED, HIDDEN, CHANGING }
+    private ExpandState expandState = ExpandState.HIDDEN;
 
 
     public MainController(ItemModel itemModel, SceneManager sceneManager) {
@@ -71,6 +89,19 @@ public class MainController {
     //Add TestCases
     //Add Class Diagram
     public void initialize() {
+        dayOfTheWeekLabel.widthProperty().addListener((observable, oldValue, newValue) -> {
+            if (expandState == ExpandState.EXPANDED) {
+                dayOfTheWeekLabel.setContentDisplay(ContentDisplay.LEFT);
+            }else if (expandState == ExpandState.HIDDEN)
+                dayOfTheWeekLabel.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+        });
+
+        dashboardBtn.widthProperty().addListener((observable, oldValue, newValue) -> changeContentPropertyOnAnimation(dashboardBtn));
+        inventoryBtn.widthProperty().addListener((observable, oldValue, newValue) -> changeContentPropertyOnAnimation(inventoryBtn));
+        exitBtn.widthProperty().addListener((observable, oldValue, newValue) -> changeContentPropertyOnAnimation(exitBtn));
+
+        addSlideAnimation();
+
         exitBtn.setOnAction(this::exitProgram);
 
         importItemsBtn.setOnAction(this::importFile);
@@ -99,6 +130,54 @@ public class MainController {
         initItemTable(itemModel.getAllItems());
     }
 
+    private void changeContentPropertyOnAnimation(JFXButton btn) {
+        if (expandState == ExpandState.EXPANDED)
+            btn.setContentDisplay(ContentDisplay.LEFT);
+        else if (expandState == ExpandState.HIDDEN)
+            btn.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+    }
+
+    private void addSlideAnimation() {
+        leftPane.translateXProperty().addListener((observable, oldValue, newValue) -> {
+            leftPane.setTranslateX(0);
+
+            if (newValue.doubleValue() > oldValue.doubleValue())
+                leftPane.setMinWidth(leftPane.getWidth() + 10);
+            else
+                leftPane.setMinWidth(leftPane.getWidth() - 10);
+        });
+
+
+        leftPane.setOnMouseEntered(event -> {
+            if (expandState == ExpandState.HIDDEN) {
+                TranslateTransition transition = new TranslateTransition(Duration.seconds(0.3), leftPane);
+                transition.setByX(100);
+
+                expandState = ExpandState.CHANGING;
+                transition.setOnFinished(finishedEvent -> {
+                    expandState = ExpandState.EXPANDED;
+                });
+
+                transition.play();
+            }
+        });
+
+        leftPane.setOnMouseExited(event -> {
+            if (expandState == ExpandState.EXPANDED) {
+                TranslateTransition transition = new TranslateTransition(Duration.seconds(0.3), leftPane);
+                transition.setByX(-100);
+
+                expandState = ExpandState.CHANGING;
+                transition.setOnFinished(finishedEvent -> {
+                    leftPane.setMinWidth(60);
+                    expandState = ExpandState.HIDDEN;
+                });
+
+                transition.play();
+            }
+        });
+    }
+
     private void addSearchTexFieldListener() {
         String searchBar = searchTextField.getText();
 
@@ -120,7 +199,7 @@ public class MainController {
         itemTable.setEditable(true);
         itemTable.getColumns().setAll(columns);
         itemTable.setColumnResizePolicy(TreeTableView.CONSTRAINED_RESIZE_POLICY);
-        itemTable.setStyle("-fx-background-color: transparentF");
+        itemTable.setStyle("-fx-background-color: transparent");
 
         itemTable.setRowFactory(param -> {
             final TreeTableRow<Item> row = new JFXTreeTableRow<>();
@@ -142,6 +221,32 @@ public class MainController {
 
             return row;
         });
+    }
+
+    private void slideMenuPane() {
+//        leftPane.setOnMouseEntered(event -> {
+//            if (expandState == ExpandState.HIDDEN) {
+//                TranslateTransition transition = new TranslateTransition(Duration.seconds(0.5), leftPane);
+//                transition.setByX(100);
+//
+//                expandState = ExpandState.CHANGING;
+//                transition.setOnFinished(finishedEvent -> expandState = ExpandState.EXPANDED);
+//
+//                transition.play();
+//            }
+//        });
+//
+//        leftPane.setOnMouseExited(event -> {
+//            if (expandState == ExpandState.EXPANDED) {
+//                TranslateTransition transition = new TranslateTransition(Duration.seconds(0.5), leftPane);
+//                transition.setByX(-50);
+//
+//                expandState = ExpandState.CHANGING;
+//                transition.setOnFinished(finishedEvent -> expandState = ExpandState.HIDDEN);
+//
+//                transition.play();
+//            }
+//        });
     }
 
     private <T> JFXTreeTableColumn<Item, T> initTreeTableColumn(String name, int width, String style, Callback<TreeTableColumn<Item, T>, TreeTableCell<Item, T>> factory) {

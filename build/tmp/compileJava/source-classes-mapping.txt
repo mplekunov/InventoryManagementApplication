@@ -28,3 +28,4 @@ ucf/assignments/SceneManager.java
  ucf.assignments.SceneManager
 ucf/assignments/Controllers/MainController.java
  ucf.assignments.Controllers.MainController
+ ucf.assignments.Controllers.MainController$ExpandState

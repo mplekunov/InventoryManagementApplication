@@ -22,7 +22,7 @@
     <top>
         <AnchorPane id="topPane" prefHeight="40.0" BorderPane.alignment="CENTER">
             <children>
-                <Label layoutX="159.0" layoutY="18.0" text="Inventory Management App" AnchorPane.bottomAnchor="0.0"
+                <Label text="Inventory Management App" AnchorPane.bottomAnchor="0.0"
                        AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="0.0">
                     <font>
                         <Font size="22.0"/>
@@ -39,17 +39,17 @@
         </AnchorPane>
     </top>
     <left>
-        <AnchorPane id="leftPane" prefWidth="200.0" BorderPane.alignment="CENTER">
+        <AnchorPane id="leftPane" fx:id="leftPane" prefWidth="40.0" BorderPane.alignment="CENTER">
             <children>
-                <VBox layoutX="21.0" layoutY="14.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                <VBox AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
                       AnchorPane.topAnchor="0.0">
                     <children>
-                        <AnchorPane id="datePane" layoutX="10.0" layoutY="10.0" prefHeight="32.0">
+                        <AnchorPane id="datePane" prefHeight="32.0">
                             <children>
-                                <Label alignment="CENTER" contentDisplay="CENTER" text="Tuesday"
+                                <Label fx:id="dayOfTheWeekLabel" alignment="CENTER" text="Tuesday"
                                        AnchorPane.bottomAnchor="4.0" AnchorPane.leftAnchor="36.0"
                                        AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="4.0"/>
-                                <ImageView fitHeight="150.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true"
+                                <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true"
                                            AnchorPane.bottomAnchor="4.0" AnchorPane.leftAnchor="12.0"
                                            AnchorPane.topAnchor="4.0">
                                     <image>
@@ -58,7 +58,6 @@
                                 </ImageView>
                             </children>
                         </AnchorPane>
-                        <Separator layoutX="10.0" layoutY="74.0"/>
                         <AnchorPane id="dashboardPane">
                             <children>
                                 <JFXButton fx:id="dashboardBtn" focusTraversable="false" alignment="BASELINE_LEFT"
@@ -133,8 +132,8 @@
                 <AnchorPane id="directoryPane" AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0"
                             prefHeight="32.0">
                     <children>
-                        <HBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                              AnchorPane.topAnchor="0.0">
+                        <HBox AnchorPane.bottomAnchor="1" AnchorPane.leftAnchor="1" AnchorPane.rightAnchor="1"
+                              AnchorPane.topAnchor="1">
                             <children>
                                 <AnchorPane>
                                     <children>
